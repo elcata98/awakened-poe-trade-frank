@@ -32,7 +32,7 @@ export async function requestPoeprices (item: ParsedItem): Promise<RareItemPrice
   const query = querystring({
     i: utf8ToBase64(transformItemText(item.rawText)),
     l: useLeagues().selectedId.value,
-    s: 'awakened-poe-trade'
+    s: 'awakened-poe-trade-frank'
   })
 
   let data = cache.get<PoepricesApiResponse>(query)
@@ -96,7 +96,7 @@ export async function sendFeedback (
   body.append('selector', feedback.option)
   body.append('feedbacktxt', feedback.text)
   body.append('qitem_txt', utf8ToBase64(transformItemText(item.rawText)))
-  body.append('source', 'awakened-poe-trade')
+  body.append('source', 'awakened-poe-trade-frank')
   body.append('min', String(prediction.min))
   body.append('max', String(prediction.max))
   body.append('currency', prediction.currency)

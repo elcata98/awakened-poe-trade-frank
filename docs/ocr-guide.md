@@ -1,4 +1,4 @@
----
+<!-- ---
 title: OCR Guide
 ---
 
@@ -44,4 +44,4 @@ This guide will help you to setup and perform OCR using Awakened PoE Trade.
 2. The text should not be occluded by health bar or other elements.
    ![](https://i.imgur.com/cM2i3Rk.png)
 
-Happy hunting!
+Happy hunting! -->
