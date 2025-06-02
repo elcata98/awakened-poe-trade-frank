@@ -76,7 +76,6 @@ server.on('upgrade', (req, socket, head) => {
 })
 
 export async function startServer (
-  appUpdater: AppUpdater,
   logger: Logger
 ): Promise<number> {
   const configStore = new ConfigStore(eventPipe)
@@ -108,7 +107,6 @@ export async function startServer (
       res.setHeader('content-type', 'application/json')
       const resBody: HostState = {
         version: app.getVersion(),
-        updater: appUpdater.info,
         contents: await configStore.load()
       }
       res.end(JSON.stringify(resBody))

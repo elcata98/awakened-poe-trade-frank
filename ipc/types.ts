@@ -37,25 +37,9 @@ export interface ShortcutAction {
   }
 }
 
-export type UpdateInfo =
-  {
-    state: 'initial' | 'checking-for-update'
-  } | {
-    state: 'update-available'
-    version: string
-    noDownloadReason: 'not-supported' | 'disabled-by-flag' | null
-  } | {
-    state: 'update-downloaded'
-    version: string
-  } | {
-    state: 'update-not-available' | 'error'
-    checkedAt: number
-  }
-
 export interface HostState {
   contents: string | null
   version: string
-  updater: UpdateInfo
 }
 
 export type IpcEvent =
@@ -68,7 +52,6 @@ export type IpcEvent =
   IpcTrackArea |
   // events used by any type of Client:
   IpcSaveConfig |
-  IpcUpdaterState |
   IpcGameLog |
   IpcClientIsActive |
   IpcLogEntry |
@@ -163,15 +146,10 @@ type IpcGameLog =
     lines: string[]
   }>
 
-type IpcUpdaterState =
-  Event<'MAIN->CLIENT::updater-state', UpdateInfo>
-
 // Hotkeyable actions are defined in `ShortcutAction`.
 // Actions below are triggered by user interaction with the UI.
 type IpcUserAction =
   Event<'CLIENT->MAIN::user-action', {
-    action: 'check-for-update' | 'update-and-restart' | 'quit'
-  } | {
     action: 'stash-search'
     text: string
   }>
