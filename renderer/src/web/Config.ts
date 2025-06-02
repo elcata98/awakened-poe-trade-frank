@@ -70,14 +70,6 @@ export async function initConfig () {
     updateConfig(defaultConfig())
     saveConfig({ isTemporary: true })
     return
-
-    // TODO
-    // dialog.showErrorBox(
-    //   'Awakened PoE Trade - Incompatible configuration',
-    //   // ----------------------
-    //   'You are trying to use an older version of Awakened PoE Trade with a newer incompatible configuration file.\n' +
-    //   'You need to install the latest version to continue using it.'
-    // )
   }
 
   updateConfig(upgradeConfig(config))

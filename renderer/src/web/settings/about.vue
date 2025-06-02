@@ -2,7 +2,7 @@
   <div class="p-2 flex flex-col h-full items-center">
     <div class="flex flex-col items-center p-2 mb-4">
       <img class="w-12 h-12" src="/images/TransferOrb.png">
-      <p class="text-base">Awakened PoE Trade</p>
+      <p class="text-base">Awakened PoE Trade Frank</p>
       <p class="">{{ t('app.version', [version]) }}</p>
       <div class="flex gap-2"></div>
     </div>
@@ -21,24 +21,6 @@ import { defineComponent, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Host } from '@/web/background/IPC'
 import { DateTime } from 'luxon'
-
-function checkForUpdates () {
-  Host.sendEvent({
-    name: 'CLIENT->MAIN::user-action',
-    payload: { action: 'check-for-update' }
-  })
-}
-
-function openDownloadPage () {
-  // window.open('https://snosme.github.io/awakened-poe-trade/download')
-}
-
-function quitAndInstall () {
-  Host.sendEvent({
-    name: 'CLIENT->MAIN::user-action',
-    payload: { action: 'update-and-restart' }
-  })
-}
 
 function fmtTime (millis: number) {
   return DateTime.fromMillis(millis).toRelative({ style: 'long' }) ?? 'n/a'

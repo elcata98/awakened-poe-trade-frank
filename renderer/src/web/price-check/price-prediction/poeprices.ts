@@ -81,7 +81,7 @@ export function getExternalLink (item: ParsedItem): string {
   const query = querystring({
     i: utf8ToBase64(transformItemText(item.rawText)),
     l: useLeagues().selectedId.value,
-    s: 'awakened-poe-trade',
+    s: 'awakened-poe-trade-frank',
     w: 1
   })
   return `https://www.poeprices.info/api?${query}`

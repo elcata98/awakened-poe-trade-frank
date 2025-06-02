@@ -150,6 +150,8 @@ type IpcGameLog =
 // Actions below are triggered by user interaction with the UI.
 type IpcUserAction =
   Event<'CLIENT->MAIN::user-action', {
+    action: 'quit'
+  } | {
     action: 'stash-search'
     text: string
   }>
