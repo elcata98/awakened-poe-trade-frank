@@ -9,7 +9,6 @@ import { GameWindow } from './windowing/GameWindow'
 import { OverlayWindow } from './windowing/OverlayWindow'
 import { GameConfig } from './host-files/GameConfig'
 import { Shortcuts } from './shortcuts/Shortcuts'
-import { AppUpdater } from './AppUpdater'
 import { AppTray } from './AppTray'
 import { OverlayVisibility } from './windowing/OverlayVisibility'
 import { GameLogWatcher } from './host-files/GameLogWatcher'
@@ -32,7 +31,6 @@ app.on('ready', async () => {
   const gameLogWatcher = new GameLogWatcher(eventPipe, logger)
   const gameConfig = new GameConfig(eventPipe, logger)
   const poeWindow = new GameWindow()
-  const appUpdater = new AppUpdater(eventPipe)
   const _httpProxy = new HttpProxy(server, logger)
 
   setTimeout(
@@ -45,11 +43,10 @@ app.on('ready', async () => {
         shortcuts.updateActions(cfg.shortcuts, cfg.stashScroll, cfg.logKeys, cfg.restoreClipboard, cfg.language)
         gameLogWatcher.restart(cfg.clientLog ?? '')
         gameConfig.readConfig(cfg.gameConfig ?? '')
-        appUpdater.checkAtStartup()
         tray.overlayKey = cfg.overlayKey
       })
       uIOhook.start()
-      const port = await startServer(appUpdater, logger)
+      const port = await startServer(logger)
       // TODO: move up (currently crashes)
       logger.write(`info ${os.type()} ${os.release} / v${app.getVersion()}`)
       overlay.loadAppPage(port)

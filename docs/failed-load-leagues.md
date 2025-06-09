@@ -26,5 +26,5 @@ you will need to complete a CAPTCHA every ~15 minutes.
 
 If you've opened Browser, waited for a while and see nothing,
 then the problem is with the network. A simple PC reboot usually helps.
-
-People have encountered some weirdness related to VPN and [DNS](https://github.com/SnosMe/awakened-poe-trade/issues/1038#issuecomment-1691780513) settings.
+<!-- 
+People have encountered some weirdness related to VPN and [DNS](https://github.com/SnosMe/awakened-poe-trade/issues/1038#issuecomment-1691780513) settings. -->

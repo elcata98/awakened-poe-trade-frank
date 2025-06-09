@@ -77,6 +77,10 @@
             v-model="lockedInitialSearch">
             <span class="bg-gray-900 text-gray-500 rounded px-2">{{ hotkeyLocked }}</span>
           </ui-toggle>
+          <ui-toggle v-if="hotkeyLockedLang"
+            v-model="lockedInitialSearch">
+            <span class="bg-gray-900 text-gray-500 rounded px-2">{{ hotkeyLockedLang }}</span>
+          </ui-toggle>
         </div>
       </div>
       <div class="mb-2 mx-2">
@@ -133,6 +137,7 @@ export default defineComponent({
         ? `${configWidget.value.hotkeyHold} + ${configWidget.value.hotkey}`
         : null),
       hotkeyLocked: computed(() => configWidget.value.hotkeyLocked),
+      hotkeyLockedLang: computed(() => configWidget.value.hotkeyLockedLang),
       smartInitialSearch: configModelValue(() => configWidget.value, 'smartInitialSearch'),
       lockedInitialSearch: configModelValue(() => configWidget.value, 'lockedInitialSearch'),
       rememberCurrency: configModelValue(() => configWidget.value, 'rememberCurrency'),

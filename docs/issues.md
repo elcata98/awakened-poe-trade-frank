@@ -1,4 +1,4 @@
----
+<!-- ---
 title: Common issues
 ---
 
@@ -44,4 +44,4 @@ title: Common issues
 ## Linux
 
 - [Tray icon is not shown](https://github.com/SnosMe/awakened-poe-trade/issues/106)
-- 🔥[Screen is black](https://github.com/SnosMe/awakened-poe-trade/issues/185)
+- 🔥[Screen is black](https://github.com/SnosMe/awakened-poe-trade/issues/185) -->

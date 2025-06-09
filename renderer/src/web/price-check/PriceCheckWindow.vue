@@ -111,6 +111,7 @@ export default defineComponent({
         hotkey: 'D',
         hotkeyHold: 'Ctrl',
         hotkeyLocked: 'Ctrl + Alt + D',
+        hotkeyLockedLang: 'Ctrl + Alt + Z',
         showSeller: false,
         searchStatRange: 10,
         showCursor: true,
@@ -212,7 +213,7 @@ export default defineComponent({
     })
 
     const leagues = useLeagues()
-    const title = computed(() => leagues.selectedId.value || 'Awakened PoE Trade')
+    const title = computed(() => leagues.selectedId.value || 'Awakened PoE Trade Frank')
     const stableOrbCost = computed(() => (xchgRate.value) ? Math.round(xchgRate.value) : null)
     const isBrowserShown = computed(() => props.config.wmFlags.includes('has-browser'))
     const overlayKey = computed(() => AppConfig().overlayKey)
