@@ -71,7 +71,8 @@ export default defineComponent({
       overlayKey: configModelValue(() => props.config, 'overlayKey'),
       priceCheckHotkeyHold: configModelValue(() => findWidget<PriceCheckWidget>('price-check', props.config)!, 'hotkeyHold'),
       priceCheckHotkey: configModelValue(() => findWidget<PriceCheckWidget>('price-check', props.config)!, 'hotkey'),
-      priceCheckHotkeyLocked: configModelValue(() => findWidget<PriceCheckWidget>('price-check', props.config)!, 'hotkeyLocked')
+      priceCheckHotkeyLocked: configModelValue(() => findWidget<PriceCheckWidget>('price-check', props.config)!, 'hotkeyLocked'),
+      priceCheckHotkeyLockedLang: configModelValue(() => findWidget<PriceCheckWidget>('price-check', props.config)!, 'hotkeyLockedLang')
     }
   }
 })

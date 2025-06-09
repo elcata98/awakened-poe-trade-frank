@@ -111,6 +111,7 @@ export default defineComponent({
         hotkey: 'D',
         hotkeyHold: 'Ctrl',
         hotkeyLocked: 'Ctrl + Alt + D',
+        hotkeyLockedLang: 'Ctrl + Alt + Z',
         showSeller: false,
         searchStatRange: 10,
         showCursor: true,

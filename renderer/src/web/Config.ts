@@ -11,9 +11,9 @@ import { registry as widgetRegistry } from './overlay/widget-registry.js'
 const _config = shallowRef<Config | null>(null)
 let _lastSavedConfig: Config | null = null
 
-export function AppConfig (): Config
-export function AppConfig<T extends widget.Widget> (type: string): T | undefined
-export function AppConfig (type?: string) {
+export function AppConfig(): Config
+export function AppConfig<T extends widget.Widget>(type: string): T | undefined
+export function AppConfig(type?: string) {
   if (!type) {
     return _config.value!
   } else {
@@ -21,12 +21,12 @@ export function AppConfig (type?: string) {
   }
 }
 
-export function updateConfig (updates: Config) {
+export function updateConfig(updates: Config) {
   _config.value = deepReactive(JSON.parse(JSON.stringify(updates)))
   document.documentElement.style.fontSize = `${_config.value!.fontSize}px`
 }
 
-export function saveConfig (opts?: { isTemporary: boolean }) {
+export function saveConfig(opts?: { isTemporary: boolean }) {
   const rawConfig = toRaw(_config.value!)
   if (rawConfig.widgets.some(w => w.wmZorder === 'exclusive' && w.wmWants === 'show')) {
     return
@@ -44,14 +44,14 @@ export function saveConfig (opts?: { isTemporary: boolean }) {
   }
 }
 
-export function pushHostConfig () {
+export function pushHostConfig() {
   Host.sendEvent({
     name: 'CLIENT->MAIN::update-host-config',
     payload: getConfigForHost()
   })
 }
 
-export async function initConfig () {
+export async function initConfig() {
   Host.onEvent('MAIN->CLIENT::config-changed', (e) => {
     _lastSavedConfig = JSON.parse(e.contents) // should be a deep copy
     updateConfig(JSON.parse(e.contents))
@@ -75,7 +75,7 @@ export async function initConfig () {
   updateConfig(upgradeConfig(config))
 }
 
-export function poeWebApi () {
+export function poeWebApi() {
   const { language, realm } = AppConfig()
   switch (language) {
     case 'en': return 'www.pathofexile.com'
@@ -168,7 +168,7 @@ export const defaultConfig = (): Config => ({
   }, [])
 })
 
-function upgradeConfig (_config: Config): Config {
+function upgradeConfig(_config: Config): Config {
   const config = _config as Omit<Config, 'widgets'> & { widgets: Array<Record<string, any>> }
 
   if (config.configVersion < 3) {
@@ -195,10 +195,10 @@ function upgradeConfig (_config: Config): Config {
       .chaosPriceThreshold = 0.05
 
     const mapCheck = config.widgets.find(w => w.wmType === 'map-check')!
-    ;(mapCheck as any).selectedStats.forEach((e: any) => {
-      e.matcher = e.matchRef
-      e.matchRef = undefined
-    })
+      ; (mapCheck as any).selectedStats.forEach((e: any) => {
+        e.matcher = e.matchRef
+        e.matchRef = undefined
+      })
 
     {
       const widgets = config.widgets.filter(w => w.wmType === 'image-strip')!
@@ -235,22 +235,22 @@ function upgradeConfig (_config: Config): Config {
     mapCheck.maps = { selectedStats: mapCheck.selectedStats }
     mapCheck.selectedStats = undefined
 
-    ;(config as any).itemCheckKey = (config as any).mapCheckKey || null
-    ;(config as any).mapCheckKey = undefined
+      ; (config as any).itemCheckKey = (config as any).mapCheckKey || null
+      ; (config as any).mapCheckKey = undefined
 
     config.configVersion = 7
   }
 
   if (config.configVersion < 8) {
     const itemCheck = config.widgets.find(w => w.wmType === 'item-check')!
-    ;(itemCheck as ItemCheckWidget).maps.showNewStats = false
+      ; (itemCheck as ItemCheckWidget).maps.showNewStats = false
     itemCheck.maps.selectedStats = (itemCheck as ItemCheckWidget).maps.selectedStats.map(entry => ({
       matcher: entry.matcher,
       decision:
         (entry as any).valueDanger ? 'danger'
           : (entry as any).valueWarning ? 'warning'
-              : (entry as any).valueDesirable ? 'desirable'
-                  : 'seen'
+            : (entry as any).valueDesirable ? 'desirable'
+              : 'seen'
     }))
 
     config.configVersion = 8
@@ -281,6 +281,7 @@ function upgradeConfig (_config: Config): Config {
     priceCheck.hotkey = (config as any).priceCheckKey
     priceCheck.hotkeyHold = (config as any).priceCheckKeyHold
     priceCheck.hotkeyLocked = (config as any).priceCheckLocked
+    priceCheck.hotkeyLockedLang = (config as any).priceCheckLockedLang
     priceCheck.showSeller = (config as any).showSeller
     priceCheck.searchStatRange = (config as any).searchStatRange
     priceCheck.showCursor = (config as any).priceCheckShowCursor
@@ -353,7 +354,7 @@ function upgradeConfig (_config: Config): Config {
       const p1decision =
         (stat.decision === 'danger') ? 'd'
           : (stat.decision === 'warning') ? 'w'
-              : (stat.decision === 'desirable') ? 'g' : 's'
+            : (stat.decision === 'desirable') ? 'g' : 's'
 
       stat.decision = `${p1decision}--`
     }
@@ -418,7 +419,7 @@ function upgradeConfig (_config: Config): Config {
   return config as unknown as Config
 }
 
-function getConfigForHost (): HostConfig {
+function getConfigForHost(): HostConfig {
   const actions: ShortcutAction[] = []
 
   const config = AppConfig()
@@ -433,6 +434,12 @@ function getConfigForHost (): HostConfig {
   if (priceCheck.hotkeyLocked) {
     actions.push({
       shortcut: priceCheck.hotkeyLocked,
+      action: { type: 'copy-item', target: 'price-check', focusOverlay: true }
+    })
+  }
+  if (priceCheck.hotkeyLockedLang) {
+    actions.push({
+      shortcut: priceCheck.hotkeyLockedLang,
       action: { type: 'copy-item', target: 'price-check', focusOverlay: true }
     })
   }
