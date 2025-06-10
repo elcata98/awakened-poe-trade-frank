@@ -72,17 +72,17 @@ import { Result, ok, err } from 'neverthrow'
 import { useI18n } from 'vue-i18n'
 import UiErrorBox from '@/web/ui/UiErrorBox.vue'
 import UiPopover from '@/web/ui/Popover.vue'
-import CheckedItem from './CheckedItem.vue'
-import BackgroundInfo from './BackgroundInfo.vue'
+import CheckedItem from '../price-check/CheckedItem.vue'
+import BackgroundInfo from '../price-check/BackgroundInfo.vue'
 import { MainProcess, Host } from '@/web/background/IPC'
 import { usePoeninja } from '../background/Prices'
 import { useLeagues } from '@/web/background/Leagues'
 import { AppConfig } from '@/web/Config'
 import { ItemCategory, ItemRarity, parseClipboard, ParsedItem } from '@/parser'
-import RelatedItems from './related-items/RelatedItems.vue'
-import RateLimiterState from './trade/RateLimiterState.vue'
-import UnidentifiedResolver from './unidentified-resolver/UnidentifiedResolver.vue'
-import CheckPositionCircle from './CheckPositionCircle.vue'
+import RelatedItems from '../price-check/related-items/RelatedItems.vue'
+import RateLimiterState from '../price-check/trade/RateLimiterState.vue'
+import UnidentifiedResolver from '../price-check/unidentified-resolver/UnidentifiedResolver.vue'
+import CheckPositionCircle from '../price-check/CheckPositionCircle.vue'
 import AppTitleBar from '@/web/ui/AppTitlebar.vue'
 import ItemQuickPrice from '@/web/ui/ItemQuickPrice.vue'
 import { TranslationWidget, WidgetManager, WidgetSpec } from '../overlay/interfaces'
@@ -110,7 +110,7 @@ export default defineComponent({
         builtinBrowser: false,
         hotkey: 'D',
         hotkeyHold: 'Ctrl',
-        hotkeyLocked: 'Ctrl + Alt + D',
+        // hotkeyLocked: 'Ctrl + Alt + D',
         hotkeyLockedLang: 'Ctrl + Alt + Z',
         showSeller: false,
         searchStatRange: 10,

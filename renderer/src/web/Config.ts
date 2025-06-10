@@ -308,7 +308,7 @@ function upgradeConfig(_config: Config): Config {
     const translation = config.widgets.find(w => w.wmType === 'translation')!
     translation.hotkey = (config as any).priceCheckKey
     translation.hotkeyHold = (config as any).priceCheckKeyHold
-    translation.hotkeyLocked = (config as any).priceCheckLocked
+    // translation.hotkeyLocked = (config as any).priceCheckLocked
     translation.hotkeyLockedLang = (config as any).priceCheckLockedLang
     translation.showSeller = (config as any).showSeller
     translation.searchStatRange = (config as any).searchStatRange
@@ -476,12 +476,6 @@ function getConfigForHost(): HostConfig {
       action: { type: 'copy-item', target: 'price-check', focusOverlay: true }
     })
   }
-  // if (priceCheck.hotkeyLockedLang) {
-  //   actions.push({
-  //     shortcut: priceCheck.hotkeyLockedLang,
-  //     action: { type: 'copy-item', target: 'price-check', focusOverlay: true }
-  //   })
-  // }
 
   const translation = AppConfig('translation') as widget.TranslationWidget
   if (translation.hotkey) {

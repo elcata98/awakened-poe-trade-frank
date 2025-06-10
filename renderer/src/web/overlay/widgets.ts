@@ -57,7 +57,7 @@ export interface PriceCheckWidget extends Widget {
 export interface TranslationWidget extends Widget {
   hotkey: string | null
   hotkeyHold: string
-  hotkeyLocked: string | null
+  // hotkeyLocked: string | null
   hotkeyLockedLang: string | null
   showSeller: false | 'account' | 'ign'
   searchStatRange: number

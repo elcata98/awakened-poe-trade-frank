@@ -1,5 +1,3 @@
-// @ts-check
-/** @type{import('../../../src/assets/data/interfaces').TranslationDict} */
 export default {
   RARITY_NORMAL: '일반',
   RARITY_MAGIC: '마법',
