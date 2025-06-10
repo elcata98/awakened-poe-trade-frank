@@ -39,6 +39,25 @@ export interface PriceCheckWidget extends Widget {
   hotkey: string | null
   hotkeyHold: string
   hotkeyLocked: string | null
+  // hotkeyLockedLang: string | null
+  showSeller: false | 'account' | 'ign'
+  searchStatRange: number
+  showRateLimitState: boolean
+  apiLatencySeconds: number
+  collapseListings: 'api' | 'app'
+  smartInitialSearch: boolean
+  lockedInitialSearch: boolean
+  activateStockFilter: boolean
+  showCursor: boolean
+  requestPricePrediction: boolean
+  builtinBrowser: boolean
+  rememberCurrency: boolean
+}
+
+export interface TranslationWidget extends Widget {
+  hotkey: string | null
+  hotkeyHold: string
+  hotkeyLocked: string | null
   hotkeyLockedLang: string | null
   showSeller: false | 'account' | 'ign'
   searchStatRange: number

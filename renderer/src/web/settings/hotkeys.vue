@@ -52,7 +52,7 @@ import { defineComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import UiRadio from '@/web/ui/UiRadio.vue'
 import { configProp, configModelValue, findWidget } from './utils'
-import { PriceCheckWidget, DelveGridWidget } from '@/web/overlay/interfaces'
+import { PriceCheckWidget, DelveGridWidget, TranslationWidget} from '@/web/overlay/interfaces'
 import { ItemCheckWidget } from '../item-check/widget.js'
 import HotkeyInput from './HotkeyInput.vue'
 
@@ -72,7 +72,11 @@ export default defineComponent({
       priceCheckHotkeyHold: configModelValue(() => findWidget<PriceCheckWidget>('price-check', props.config)!, 'hotkeyHold'),
       priceCheckHotkey: configModelValue(() => findWidget<PriceCheckWidget>('price-check', props.config)!, 'hotkey'),
       priceCheckHotkeyLocked: configModelValue(() => findWidget<PriceCheckWidget>('price-check', props.config)!, 'hotkeyLocked'),
-      priceCheckHotkeyLockedLang: configModelValue(() => findWidget<PriceCheckWidget>('price-check', props.config)!, 'hotkeyLockedLang')
+      // priceCheckHotkeyLockedLang: configModelValue(() => findWidget<PriceCheckWidget>('price-check', props.config)!, 'hotkeyLockedLang'),
+      translationHotkeyHold: configModelValue(() => findWidget<TranslationWidget>('translation', props.config)!, 'hotkeyHold'),
+      translationkHotkey: configModelValue(() => findWidget<TranslationWidget>('translation', props.config)!, 'hotkey'),
+      translationHotkeyLocked: configModelValue(() => findWidget<TranslationWidget>('translation', props.config)!, 'hotkeyLocked'),
+      translationHotkeyLockedLang: configModelValue(() => findWidget<TranslationWidget>('translation', props.config)!, 'hotkeyLockedLang')
     }
   }
 })

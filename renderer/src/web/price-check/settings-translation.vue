@@ -77,10 +77,10 @@
             v-model="lockedInitialSearch">
             <span class="bg-gray-900 text-gray-500 rounded px-2">{{ hotkeyLocked }}</span>
           </ui-toggle>
-          <!-- <ui-toggle v-if="hotkeyLockedLang"
+          <ui-toggle v-if="hotkeyLockedLang"
             v-model="lockedInitialSearch">
             <span class="bg-gray-900 text-gray-500 rounded px-2">{{ hotkeyLockedLang }}</span>
-          </ui-toggle> -->
+          </ui-toggle>
         </div>
       </div>
       <div class="mb-2 mx-2">
@@ -104,18 +104,18 @@ import UiCheckbox from '@/web/ui/UiCheckbox.vue'
 import UiToggle from '@/web/ui/UiToggle.vue'
 import UiErrorBox from '@/web/ui/UiErrorBox.vue'
 import { configModelValue, configProp, findWidget } from '../settings/utils.js'
-import type { PriceCheckWidget } from '@/web/overlay/interfaces'
-import { useLeagues } from '../background/Leagues'
+import type { TranslationWidget } from '@/web/overlay/interfaces'
+import { useLeagues } from '../background/Leagues.js'
 
 export default defineComponent({
-  name: 'price_check.name',
+  name: 'translation.name',
   components: { UiRadio, UiCheckbox, UiToggle, UiErrorBox },
   props: configProp(),
   setup (props) {
-    const configWidget = computed(() => findWidget<PriceCheckWidget>('price-check', props.config)!)
+    const configWidget = computed(() => findWidget<TranslationWidget>('translation', props.config)!)
 
     const leagues = useLeagues()
-    const { t } = useI18nNs('price_check')
+    const { t } = useI18nNs('translation')
 
     return {
       t,
@@ -137,7 +137,7 @@ export default defineComponent({
         ? `${configWidget.value.hotkeyHold} + ${configWidget.value.hotkey}`
         : null),
       hotkeyLocked: computed(() => configWidget.value.hotkeyLocked),
-      // hotkeyLockedLang: computed(() => configWidget.value.hotkeyLockedLang),
+      hotkeyLockedLang: computed(() => configWidget.value.hotkeyLockedLang),
       smartInitialSearch: configModelValue(() => configWidget.value, 'smartInitialSearch'),
       lockedInitialSearch: configModelValue(() => configWidget.value, 'lockedInitialSearch'),
       rememberCurrency: configModelValue(() => configWidget.value, 'rememberCurrency'),
