@@ -194,6 +194,9 @@ function upgradeConfig(_config: Config): Config {
     config.widgets.find(w => w.wmType === 'price-check')!
       .chaosPriceThreshold = 0.05
 
+    config.widgets.find(w => w.wmType === 'translation')!
+      .chaosPriceThreshold = 0.05
+
     const mapCheck = config.widgets.find(w => w.wmType === 'map-check')!
       ; (mapCheck as any).selectedStats.forEach((e: any) => {
         e.matcher = e.matchRef
@@ -224,6 +227,11 @@ function upgradeConfig(_config: Config): Config {
     config.widgets.find(w => w.wmType === 'price-check')!
       .showRateLimitState = ((config as any).logLevel === 'debug')
     config.widgets.find(w => w.wmType === 'price-check')!
+      .apiLatencySeconds = 2
+
+    config.widgets.find(w => w.wmType === 'translation')!
+      .showRateLimitState = ((config as any).logLevel === 'debug')
+    config.widgets.find(w => w.wmType === 'translation')!
       .apiLatencySeconds = 2
 
     config.configVersion = 6
@@ -259,13 +267,20 @@ function upgradeConfig(_config: Config): Config {
   if (config.configVersion < 9) {
     config.widgets.find(w => w.wmType === 'price-check')!
       .collapseListings = 'api'
-
     config.widgets.find(w => w.wmType === 'price-check')!
       .smartInitialSearch = true
     config.widgets.find(w => w.wmType === 'price-check')!
       .lockedInitialSearch = true
-
     config.widgets.find(w => w.wmType === 'price-check')!
+      .activateStockFilter = false
+
+    config.widgets.find(w => w.wmType === 'translation')!
+      .collapseListings = 'api'
+    config.widgets.find(w => w.wmType === 'translation')!
+      .smartInitialSearch = true
+    config.widgets.find(w => w.wmType === 'translation')!
+      .lockedInitialSearch = true
+    config.widgets.find(w => w.wmType === 'translation')!
       .activateStockFilter = false
 
     config.configVersion = 9
@@ -281,7 +296,7 @@ function upgradeConfig(_config: Config): Config {
     priceCheck.hotkey = (config as any).priceCheckKey
     priceCheck.hotkeyHold = (config as any).priceCheckKeyHold
     priceCheck.hotkeyLocked = (config as any).priceCheckLocked
-    priceCheck.hotkeyLockedLang = (config as any).priceCheckLockedLang
+    // priceCheck.hotkeyLockedLang = (config as any).priceCheckLockedLang
     priceCheck.showSeller = (config as any).showSeller
     priceCheck.searchStatRange = (config as any).searchStatRange
     priceCheck.showCursor = (config as any).priceCheckShowCursor
@@ -290,11 +305,27 @@ function upgradeConfig(_config: Config): Config {
       priceCheck.chaosPriceThreshold = 0
     }
 
+    const translation = config.widgets.find(w => w.wmType === 'translation')!
+    translation.hotkey = (config as any).priceCheckKey
+    translation.hotkeyHold = (config as any).priceCheckKeyHold
+    translation.hotkeyLocked = (config as any).priceCheckLocked
+    translation.hotkeyLockedLang = (config as any).priceCheckLockedLang
+    translation.showSeller = (config as any).showSeller
+    translation.searchStatRange = (config as any).searchStatRange
+    translation.showCursor = (config as any).priceCheckShowCursor
+
+    if (translation.chaosPriceThreshold === 0.05) {
+      translation.chaosPriceThreshold = 0
+    }
+
     config.configVersion = 10
   }
 
   if (config.configVersion < 11) {
     config.widgets.find(w => w.wmType === 'price-check')!
+      .requestPricePrediction = false
+
+    config.widgets.find(w => w.wmType === 'translation')!
       .requestPricePrediction = false
 
     config.configVersion = 11
@@ -345,6 +376,9 @@ function upgradeConfig(_config: Config): Config {
     const priceCheck = config.widgets.find(w => w.wmType === 'price-check') as widget.PriceCheckWidget
     priceCheck.builtinBrowser = false
 
+    const translation = config.widgets.find(w => w.wmType === 'translation') as widget.TranslationWidget
+    translation.builtinBrowser = false
+
     const itemSearch = config.widgets.find(w => w.wmType === 'item-search') as ItemSearchWidget
     itemSearch.ocrGemsKey = null
 
@@ -384,6 +418,11 @@ function upgradeConfig(_config: Config): Config {
   const priceCheck = config.widgets.find(w => w.wmType === 'price-check') as widget.PriceCheckWidget
   if (priceCheck.rememberCurrency === undefined) {
     priceCheck.rememberCurrency = false
+  }
+
+  const translation = config.widgets.find(w => w.wmType === 'translation') as widget.TranslationWidget
+  if (translation.rememberCurrency === undefined) {
+    translation.rememberCurrency = false
   }
 
   for (const widget of config.widgets) {
@@ -437,12 +476,34 @@ function getConfigForHost(): HostConfig {
       action: { type: 'copy-item', target: 'price-check', focusOverlay: true }
     })
   }
-  if (priceCheck.hotkeyLockedLang) {
+  // if (priceCheck.hotkeyLockedLang) {
+  //   actions.push({
+  //     shortcut: priceCheck.hotkeyLockedLang,
+  //     action: { type: 'copy-item', target: 'price-check', focusOverlay: true }
+  //   })
+  // }
+
+  const translation = AppConfig('translation') as widget.TranslationWidget
+  if (translation.hotkey) {
     actions.push({
-      shortcut: priceCheck.hotkeyLockedLang,
-      action: { type: 'copy-item', target: 'price-check', focusOverlay: true }
+      shortcut: `${translation.hotkeyHold} + ${translation.hotkey}`,
+      action: { type: 'copy-item', target: 'translation', focusOverlay: false },
+      keepModKeys: true
     })
   }
+  if (translation.hotkeyLocked) {
+    actions.push({
+      shortcut: translation.hotkeyLocked,
+      action: { type: 'copy-item', target: 'translation', focusOverlay: true }
+    })
+  }
+  if (translation.hotkeyLockedLang) {
+    actions.push({
+      shortcut: translation.hotkeyLockedLang,
+      action: { type: 'copy-item', target: 'translation', focusOverlay: true }
+    })
+  }
+
   actions.push({
     shortcut: config.overlayKey,
     action: { type: 'toggle-overlay' },

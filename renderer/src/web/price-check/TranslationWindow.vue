@@ -85,19 +85,19 @@ import UnidentifiedResolver from './unidentified-resolver/UnidentifiedResolver.v
 import CheckPositionCircle from './CheckPositionCircle.vue'
 import AppTitleBar from '@/web/ui/AppTitlebar.vue'
 import ItemQuickPrice from '@/web/ui/ItemQuickPrice.vue'
-import { PriceCheckWidget, WidgetManager, WidgetSpec } from '../overlay/interfaces'
+import { TranslationWidget, WidgetManager, WidgetSpec } from '../overlay/interfaces'
 
 type ParseError = { name: string; message: string; rawText: ParsedItem['rawText'] }
 
 export default defineComponent({
   widget: {
-    type: 'price-check',
+    type: 'translation',
     instances: 'single',
-    initInstance: (): PriceCheckWidget => {
+    initInstance: (): TranslationWidget => {
       return {
         wmId: 0,
-        wmType: 'price-check',
-        wmTitle: '',
+        wmType: 'translation',
+        wmTitle: 'Translations',
         wmWants: 'hide',
         wmZorder: 'exclusive',
         wmFlags: ['hide-on-blur', 'menu::skip'],
@@ -111,7 +111,7 @@ export default defineComponent({
         hotkey: 'D',
         hotkeyHold: 'Ctrl',
         hotkeyLocked: 'Ctrl + Alt + D',
-        // hotkeyLockedLang: 'Ctrl + Alt + Z',
+        hotkeyLockedLang: 'Ctrl + Alt + Z',
         showSeller: false,
         searchStatRange: 10,
         showCursor: true,
@@ -134,7 +134,7 @@ export default defineComponent({
   },
   props: {
     config: {
-      type: Object as PropType<PriceCheckWidget>,
+      type: Object as PropType<TranslationWidget>,
       required: true
     }
   },
@@ -152,7 +152,7 @@ export default defineComponent({
     const checkPosition = shallowRef({ x: 1, y: 1 })
 
     MainProcess.onEvent('MAIN->CLIENT::item-text', (e) => {
-      if (e.target !== 'price-check') return
+      if (e.target !== 'translation') return
 
       if (Host.isElectron && !e.focusOverlay) {
         // everything in CSS pixels
@@ -213,7 +213,7 @@ export default defineComponent({
     })
 
     const leagues = useLeagues()
-    const title = computed(() => leagues.selectedId.value || 'Awakened PoE Trade Frank')
+    const title = computed(() => 'Translate! - ' + leagues.selectedId.value || 'Awakened PoE Trade Frank')
     const stableOrbCost = computed(() => (xchgRate.value) ? Math.round(xchgRate.value) : null)
     const isBrowserShown = computed(() => props.config.wmFlags.includes('has-browser'))
     const overlayKey = computed(() => AppConfig().overlayKey)
