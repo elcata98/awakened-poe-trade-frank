@@ -1,6 +1,6 @@
 <template>
   <div
-    style="top: 0; left: 0; height: 100%; width: 100%; position: absolute;"
+    style="top: 33%; left: 0; height: 50%; width: 100%; position: absolute;"
     class="flex grow h-full pointer-events-none" :class="{
     'flex-row': clickPosition === 'stash',
     'flex-row-reverse': clickPosition === 'inventory',
@@ -10,27 +10,11 @@
     </div>
     <div id="price-window" class="layout-column shrink-0 text-gray-200 pointer-events-auto" style="width: 28.75rem;">
       <AppTitleBar @close="closePriceCheck" @click="openLeagueSelection" :title="title">
-        <ui-popover v-if="stableOrbCost" trigger="click" boundary="#price-window">
-          <template #target>
-            <button><i class="fas fa-exchange-alt" /> {{ stableOrbCost }}</button>
-          </template>
-          <template #content>
-            <item-quick-price class="text-base"
-              :price="{ min: stableOrbCost, max: stableOrbCost, currency: 'chaos' }"
-              item-img="/images/divine.png"
-            />
-            <div v-for="i in 9" :key="i">
-              <div class="pl-1">{{ i / 10 }} div ⇒ {{ Math.round(stableOrbCost * i / 10) }} c</div>
-            </div>
-          </template>
-        </ui-popover>
-        <i v-else-if="xchgRateLoading()" class="fas fa-dna fa-spin px-2" />
-        <div v-else class="w-8" />
       </AppTitleBar>
       <div class="grow layout-column min-h-0 bg-gray-800">
-        <background-info />
-        <check-position-circle v-if="showCheckPos"
-          :position="checkPosition" style="z-index: -1;" />
+        <!-- <background-info /> -->
+        <!-- <check-position-circle v-if="showCheckPos"
+          :position="checkPosition" style="z-index: -1;" /> -->
         <template v-if="item?.isErr()">
           <ui-error-box class="m-4">
             <template #name>{{ t(item.error.name) }}</template>
@@ -40,7 +24,7 @@
         </template>
         <template v-else-if="item?.isOk()">
           <unidentified-resolver :item="item.value" @identify="handleIdentification($event)" />
-          <checked-item v-if="isLeagueSelected"
+          <checked-translation v-if="isLeagueSelected"
             :item="item.value" :advanced-check="advancedCheck" />
         </template>
         <div v-if="isBrowserShown" class="bg-gray-900 px-6 py-2 truncate">
@@ -58,9 +42,6 @@
         'flex-row': clickPosition === 'stash',
         'flex-row-reverse': clickPosition === 'inventory'
       }">
-        <related-items v-if="item?.isOk()" class="pointer-events-auto"
-          :item="item.value" :click-position="clickPosition" />
-        <rate-limiter-state class="pointer-events-auto" />
       </div>
     </div>
   </div>
@@ -72,15 +53,12 @@ import { Result, ok, err } from 'neverthrow'
 import { useI18n } from 'vue-i18n'
 import UiErrorBox from '@/web/ui/UiErrorBox.vue'
 import UiPopover from '@/web/ui/Popover.vue'
-import CheckedItem from '../price-check/CheckedItem.vue'
+import CheckedTranslation from './CheckedTranslation.vue'
 import BackgroundInfo from '../price-check/BackgroundInfo.vue'
 import { MainProcess, Host } from '@/web/background/IPC'
-import { usePoeninja } from '../background/Prices'
 import { useLeagues } from '@/web/background/Leagues'
 import { AppConfig } from '@/web/Config'
 import { ItemCategory, ItemRarity, parseClipboard, ParsedItem } from '@/parser'
-import RelatedItems from '../price-check/related-items/RelatedItems.vue'
-import RateLimiterState from '../price-check/trade/RateLimiterState.vue'
 import UnidentifiedResolver from '../price-check/unidentified-resolver/UnidentifiedResolver.vue'
 import CheckPositionCircle from '../price-check/CheckPositionCircle.vue'
 import AppTitleBar from '@/web/ui/AppTitlebar.vue'
@@ -101,32 +79,20 @@ export default defineComponent({
         wmWants: 'hide',
         wmZorder: 'exclusive',
         wmFlags: ['hide-on-blur', 'menu::skip'],
-        showRateLimitState: false,
-        apiLatencySeconds: 2,
-        collapseListings: 'api',
-        smartInitialSearch: true,
-        lockedInitialSearch: true,
-        activateStockFilter: false,
         builtinBrowser: false,
-        hotkey: 'D',
+        hotkey: 'Z',
         hotkeyHold: 'Ctrl',
-        // hotkeyLocked: 'Ctrl + Alt + D',
         hotkeyLockedLang: 'Ctrl + Alt + Z',
-        showSeller: false,
         searchStatRange: 10,
-        showCursor: true,
-        requestPricePrediction: false,
-        rememberCurrency: false
+        showCursor: true
       }
     }
   } satisfies WidgetSpec,
   components: {
     AppTitleBar,
-    CheckedItem,
+    CheckedTranslation,
     UnidentifiedResolver,
     BackgroundInfo,
-    RelatedItems,
-    RateLimiterState,
     CheckPositionCircle,
     ItemQuickPrice,
     UiErrorBox,
@@ -140,7 +106,6 @@ export default defineComponent({
   },
   setup (props) {
     const wm = inject<WidgetManager>('wm')!
-    const { xchgRate, initialLoading: xchgRateLoading, queuePricesFetch } = usePoeninja()
 
     nextTick(() => {
       props.config.wmWants = 'hide'
@@ -194,7 +159,6 @@ export default defineComponent({
         }))
 
       if (item.value.isOk()) {
-        queuePricesFetch()
       }
     })
 
@@ -214,7 +178,6 @@ export default defineComponent({
 
     const leagues = useLeagues()
     const title = computed(() => 'Translate! - ' + leagues.selectedId.value || 'Awakened PoE Trade Frank')
-    const stableOrbCost = computed(() => (xchgRate.value) ? Math.round(xchgRate.value) : null)
     const isBrowserShown = computed(() => props.config.wmFlags.includes('has-browser'))
     const overlayKey = computed(() => AppConfig().overlayKey)
     const showCheckPos = computed(() => wm.active.value && props.config.showCursor)
@@ -278,8 +241,6 @@ export default defineComponent({
       iframeEl,
       closePriceCheck,
       title,
-      stableOrbCost,
-      xchgRateLoading,
       showCheckPos,
       checkPosition,
       item,

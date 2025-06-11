@@ -485,12 +485,6 @@ function getConfigForHost(): HostConfig {
       keepModKeys: true
     })
   }
-  if (translation.hotkeyLocked) {
-    actions.push({
-      shortcut: translation.hotkeyLocked,
-      action: { type: 'copy-item', target: 'translation', focusOverlay: true }
-    })
-  }
   if (translation.hotkeyLockedLang) {
     actions.push({
       shortcut: translation.hotkeyLockedLang,
