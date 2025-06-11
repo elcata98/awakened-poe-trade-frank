@@ -72,10 +72,9 @@ export default defineComponent({
       priceCheckHotkeyHold: configModelValue(() => findWidget<PriceCheckWidget>('price-check', props.config)!, 'hotkeyHold'),
       priceCheckHotkey: configModelValue(() => findWidget<PriceCheckWidget>('price-check', props.config)!, 'hotkey'),
       priceCheckHotkeyLocked: configModelValue(() => findWidget<PriceCheckWidget>('price-check', props.config)!, 'hotkeyLocked'),
-      // priceCheckHotkeyLockedLang: configModelValue(() => findWidget<PriceCheckWidget>('price-check', props.config)!, 'hotkeyLockedLang'),
       translationHotkeyHold: configModelValue(() => findWidget<TranslationWidget>('translation', props.config)!, 'hotkeyHold'),
       translationkHotkey: configModelValue(() => findWidget<TranslationWidget>('translation', props.config)!, 'hotkey'),
-      translationHotkeyLocked: configModelValue(() => findWidget<TranslationWidget>('translation', props.config)!, 'hotkeyLocked'),
+      // translationHotkeyLocked: configModelValue(() => findWidget<TranslationWidget>('translation', props.config)!, 'hotkeyLocked'),
       translationHotkeyLockedLang: configModelValue(() => findWidget<TranslationWidget>('translation', props.config)!, 'hotkeyLockedLang')
     }
   }

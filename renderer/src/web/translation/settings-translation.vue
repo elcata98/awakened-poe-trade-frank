@@ -30,39 +30,12 @@
         <input v-model="accountName" class="rounded bg-gray-900 px-1 block w-full mb-1 font-poe" />
       </div>
     </div>
-    <div class="mb-2">
-      <div class="flex-1 mb-1">{{ t(':show_seller') }}</div>
-      <div class="mb-1 flex">
-        <ui-radio v-model="showSeller" :value="false" class="mr-4">{{ t('No') }}</ui-radio>
-        <ui-radio v-model="showSeller" value="account" class="mr-4">{{ t('settings.account_name') }}</ui-radio>
-        <ui-radio v-model="showSeller" value="ign">{{ t('settings.last_char_name') }}</ui-radio>
-      </div>
-      <div class="mb-4 italic text-gray-500">{{ t(':highlight_hint') }}</div>
-    </div>
-    <div class="mb-2">
-      <div class="flex-1 mb-1">{{ t(':fill_rolls') }}</div>
-      <div class="mb-4 flex">
-        <div class="flex mr-6">
-          <span class="mr-1">+-</span>
-          <input v-model.number="searchStatRange" class="rounded bg-gray-900 px-1 block w-16 mb-1 font-poe text-center" />
-          <span class="ml-1">%</span>
-        </div>
-        <ui-radio v-model="searchStatRange" :value="0">{{ t(':fill_roll_exact') }}</ui-radio>
-      </div>
-    </div>
-    <ui-checkbox class="mb-4"
-      v-model="rememberCurrency">{{ t(':remember_currency') }}</ui-checkbox>
-    <ui-checkbox class="mb-4"
-      v-model="activateStockFilter">{{ t(':select_stock') }}</ui-checkbox>
-    <ui-checkbox class="mb-4"
-      v-model="requestPricePrediction">{{ t(':show_prediction') }} <span class="bg-gray-700 px-1 rounded">www.poeprices.info</span></ui-checkbox>
     <ui-checkbox class="mb-4"
       v-model="showCursor">{{ t(':cursor_pos') }}</ui-checkbox>
     <div class="mb-4" :class="{ 'p-2 bg-orange-600 rounded': builtinBrowser }">
       <ui-checkbox v-model="builtinBrowser">{{ t(':enable_browser') }}</ui-checkbox>
       <div v-if="builtinBrowser" class="mt-1">{{ t(':builtin_browser_warning') }}</div>
     </div>
-    <div class="border-2 rounded border-gray-700 mb-2">
       <div class="bg-gray-700 p-2 mb-2">{{ t(':warn_expensive') }}</div>
       <ui-checkbox class="mb-4 mx-2" :values="['app', 'api']"
         v-model="collapseListings">{{ t(':accurate_collapsed') }}</ui-checkbox>
@@ -72,10 +45,6 @@
           <ui-toggle v-if="hotkeyQuick"
             v-model="smartInitialSearch" class="mr-6">
             <span class="bg-gray-900 text-gray-500 rounded px-2">{{ hotkeyQuick }}</span>
-          </ui-toggle>
-          <ui-toggle v-if="hotkeyLocked"
-            v-model="lockedInitialSearch">
-            <span class="bg-gray-900 text-gray-500 rounded px-2">{{ hotkeyLocked }}</span>
           </ui-toggle>
           <ui-toggle v-if="hotkeyLockedLang"
             v-model="lockedInitialSearch">
@@ -92,7 +61,6 @@
           </div>
         </div>
       </div>
-    </div>
   </div>
 </template>
 
@@ -127,42 +95,9 @@ export default defineComponent({
         set: (value) => { props.config.leagueId = value }
       }),
       accountName: configModelValue(() => props.config, 'accountName'),
-      showSeller: configModelValue(() => configWidget.value, 'showSeller'),
-      activateStockFilter: configModelValue(() => configWidget.value, 'activateStockFilter'),
       showCursor: configModelValue(() => configWidget.value, 'showCursor'),
       builtinBrowser: configModelValue(() => configWidget.value, 'builtinBrowser'),
-      requestPricePrediction: configModelValue(() => configWidget.value, 'requestPricePrediction'),
-      collapseListings: configModelValue(() => configWidget.value, 'collapseListings'),
-      hotkeyQuick: computed(() => configWidget.value.hotkey
-        ? `${configWidget.value.hotkeyHold} + ${configWidget.value.hotkey}`
-        : null),
-      hotkeyLocked: computed(() => configWidget.value.hotkeyLocked),
       hotkeyLockedLang: computed(() => configWidget.value.hotkeyLockedLang),
-      smartInitialSearch: configModelValue(() => configWidget.value, 'smartInitialSearch'),
-      lockedInitialSearch: configModelValue(() => configWidget.value, 'lockedInitialSearch'),
-      rememberCurrency: configModelValue(() => configWidget.value, 'rememberCurrency'),
-      searchStatRange: computed<number>({
-        get () {
-          return configWidget.value.searchStatRange
-        },
-        set (value) {
-          if (typeof value !== 'number') return
-
-          if (value >= 0 && value <= 50) {
-            configWidget.value.searchStatRange = value
-          }
-        }
-      }),
-      apiLatencySeconds: computed<number>({
-        get () {
-          return configWidget.value.apiLatencySeconds
-        },
-        set (value) {
-          if (typeof value !== 'number') return
-
-          configWidget.value.apiLatencySeconds = Math.min(Math.max(value, 0.5), 10)
-        }
-      }),
       leagues
     }
   }
