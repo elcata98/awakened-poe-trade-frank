@@ -24,43 +24,11 @@
         <button class="btn" @click="leagues.load">{{ t('Retry') }}</button>
       </template>
     </ui-error-box>
-    <div class="mb-2">
-      <div class="flex-1 mb-1">{{ t('settings.account_name') }}</div>
-      <div class="mb-4">
-        <input v-model="accountName" class="rounded bg-gray-900 px-1 block w-full mb-1 font-poe" />
+    <div class="mb-2 mx-2">
+      <div class="mb-4 flex">
+        <span class="bg-gray-900 text-gray-500 rounded px-2">{{ hotkeyLockedLang }}</span>
       </div>
     </div>
-    <ui-checkbox class="mb-4"
-      v-model="showCursor">{{ t(':cursor_pos') }}</ui-checkbox>
-    <div class="mb-4" :class="{ 'p-2 bg-orange-600 rounded': builtinBrowser }">
-      <ui-checkbox v-model="builtinBrowser">{{ t(':enable_browser') }}</ui-checkbox>
-      <div v-if="builtinBrowser" class="mt-1">{{ t(':builtin_browser_warning') }}</div>
-    </div>
-      <div class="bg-gray-700 p-2 mb-2">{{ t(':warn_expensive') }}</div>
-      <ui-checkbox class="mb-4 mx-2" :values="['app', 'api']"
-        v-model="collapseListings">{{ t(':accurate_collapsed') }}</ui-checkbox>
-      <div class="mb-2 mx-2">
-        <div class="flex-1 mb-1">{{ t(':auto_search') }}</div>
-        <div class="mb-4 flex">
-          <ui-toggle v-if="hotkeyQuick"
-            v-model="smartInitialSearch" class="mr-6">
-            <span class="bg-gray-900 text-gray-500 rounded px-2">{{ hotkeyQuick }}</span>
-          </ui-toggle>
-          <ui-toggle v-if="hotkeyLockedLang"
-            v-model="lockedInitialSearch">
-            <span class="bg-gray-900 text-gray-500 rounded px-2">{{ hotkeyLockedLang }}</span>
-          </ui-toggle>
-        </div>
-      </div>
-      <div class="mb-2 mx-2">
-        <div class="flex-1 mb-1">{{ t(':extra_delay') }}</div>
-        <div class="flex">
-          <div class="flex mr-6">
-            <input v-model.number="apiLatencySeconds" class="rounded bg-gray-900 px-1 block w-16 mb-1 font-poe text-center" />
-            <span class="ml-2">{{ t('seconds') }}</span>
-          </div>
-        </div>
-      </div>
   </div>
 </template>
 
