@@ -9,12 +9,9 @@
       style="width: var(--game-panel);">
     </div>
     <div id="price-window" class="layout-column shrink-0 text-gray-200 pointer-events-auto" style="width: 28.75rem;">
-      <AppTitleBar @close="closePriceCheck" @click="openLeagueSelection" :title="title">
+      <AppTitleBar @close="close" @click="openLeagueSelection" :title="title">
       </AppTitleBar>
       <div class="grow layout-column min-h-0 bg-gray-800">
-        <!-- <background-info /> -->
-        <!-- <check-position-circle v-if="showCheckPos"
-          :position="checkPosition" style="z-index: -1;" /> -->
         <template v-if="item?.isErr()">
           <ui-error-box class="m-4">
             <template #name>{{ t(item.error.name) }}</template>
@@ -189,7 +186,6 @@ export default defineComponent({
         return checkPosition.value.x > (window.screenX + window.innerWidth / 2)
           ? 'inventory'
           : 'stash'
-          // or {chat, vendor, center of screen}
       }
     })
 
@@ -203,7 +199,7 @@ export default defineComponent({
       }
     })
 
-    function closePriceCheck () {
+    function close () {
       if (isBrowserShown.value || !Host.isElectron) {
         wm.hide(props.config.wmId)
       } else {
@@ -239,7 +235,7 @@ export default defineComponent({
       clickPosition,
       isBrowserShown,
       iframeEl,
-      closePriceCheck,
+      close,
       title,
       showCheckPos,
       checkPosition,
