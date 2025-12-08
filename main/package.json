@@ -1,6 +1,6 @@
 {
   "name": "awakened-poe-trade-frank",
-  "version": "0.325104.0",
+  "version": "0.327105.0",
   "private": true,
   "scripts": {
     "dev": "node build/script.mjs",
