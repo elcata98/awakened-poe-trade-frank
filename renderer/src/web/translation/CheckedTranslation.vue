@@ -1,11 +1,12 @@
 <template>
   <div v-if="show" class="p-4 layout-column min-h-0">
-    <!-- <label>{{ item }}</label>
-    <br/> -->
+    <br/>
     <label>{{ item.info.name }}</label>
     <br/>
     <label>{{ item.info.unique?.base }}</label>
     <img :src="item.info.icon" style="object-fit: none;"/>
+    <br/>
+    <label>{{ item.newMods[0].stats[0].translation.string.replace('#', item.newMods[0].stats[0].roll ? ''+item.newMods[0].stats[0].roll.value : '') }}</label>
   </div>
 </template>
 
