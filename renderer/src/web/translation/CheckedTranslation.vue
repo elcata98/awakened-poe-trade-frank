@@ -6,6 +6,8 @@
     <br/>
     <label>{{ item.info.unique?.base }}</label>
     <img :src="item.info.icon" style="object-fit: none;"/>
+    <br/>
+    <label>{{ item.rawText }}</label>
   </div>
 </template>
 
