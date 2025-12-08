@@ -1,6 +1,6 @@
 {
-  "name": "awakened-poe-trade",
-  "version": "3.25.104",
+  "name": "awakened-poe-trade-frank",
+  "version": "0.327105.0",
   "private": true,
   "scripts": {
     "dev": "node build/script.mjs",
@@ -21,8 +21,8 @@
     "@types/ws": "^8.5.3",
     "@wokwi/bmp-ts": "^3.0.0",
     "comlink": "^4.3.1",
-    "electron": "39.2.4",
-    "electron-builder": "26.0.12",
+    "electron": "33.2.1",
+    "electron-builder": "25.1.8",
     "electron-updater": "^6.3.0",
     "esbuild": "^0.27.0",
     "ini": "^6.0.0",

@@ -1,5 +1,5 @@
 import fnv1a from '@sindresorhus/fnv1a'
-import type { BaseType, DropEntry, Stat, StatOrGroup, StatMatcher, TranslationDict } from './interfaces'
+import type { BaseType, DropEntry, Stat, StatMatcher, TranslationDict } from './interfaces'
 
 export * from './interfaces'
 
@@ -130,7 +130,6 @@ async function loadStats (language: string) {
     if (!stats.some(stat =>
       stat.matchers.some(m => m.string === matchStr || m.advanced === matchStr))
     ) {
-      // console.log('fnv1a32 collision')
       return undefined
     }
     return statOrGroup
