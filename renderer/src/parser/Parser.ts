@@ -17,37 +17,37 @@ interface ParserState extends ParsedItem {
 
 export function parseClipboard (clipboard: string): Result<ParsedItem, string> {
   try {
-    let sections = itemTextToSections(clipboard)
+    // let sections = itemTextToSections(clipboard)
 
-    if (sections[0][2] === _$.CANNOT_USE_ITEM) {
-      sections[0].pop() // remove CANNOT_USE_ITEM line
-      sections[1].unshift(...sections[0]) // prepend item class & rarity into second section
-      sections.shift() // remove first section where CANNOT_USE_ITEM line was
-    }
-    const parsed = parseNamePlate(sections[0])
-    if (!parsed.isOk()) return parsed
+    // if (sections[0][2] === _$.CANNOT_USE_ITEM) {
+    //   sections[0].pop() // remove CANNOT_USE_ITEM line
+    //   sections[1].unshift(...sections[0]) // prepend item class & rarity into second section
+    //   sections.shift() // remove first section where CANNOT_USE_ITEM line was
+    // }
+    // const parsed = parseNamePlate(sections[0])
+    // if (!parsed.isOk()) return parsed
 
-    sections.shift()
+    // sections.shift()
     let parsedV2 = parseV2(clipboard)
 
-    // each section can be parsed at most by one parser
-    for (const parser of parsers) {
-      if (typeof parser === 'object') {
-        const error = parser.virtual(parsed.value)
-        if (error) return error
-        continue
-      }
+    // // each section can be parsed at most by one parser
+    // for (const parser of parsers) {
+    //   if (typeof parser === 'object') {
+    //     const error = parser.virtual(parsed.value)
+    //     if (error) return error
+    //     continue
+    //   }
 
-      for (const section of sections) {
-        const result = parser(section, parsed.value)
-        if (result === 'SECTION_PARSED') {
-          sections = sections.filter(s => s !== section)
-          break
-        } else if (result === 'PARSER_SKIPPED') {
-          break
-        }
-      }
-    }
+    //   for (const section of sections) {
+    //     const result = parser(section, parsed.value)
+    //     if (result === 'SECTION_PARSED') {
+    //       sections = sections.filter(s => s !== section)
+    //       break
+    //     } else if (result === 'PARSER_SKIPPED') {
+    //       break
+    //     }
+    //   }
+    // }
 
     return Object.freeze(parsedV2)
   } catch (e) {

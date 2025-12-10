@@ -155,8 +155,8 @@ function parseDivinationCards(lines: string[]): Result<ParsedItem, string> {
     info: baseType,
     rawText: baseType.name,
     category: ItemCategory.DivinationCard,
-    cardName: lines[2],
-    cardStackSize: lines[4],
+    name: lines[2],
+    stackSize: lines[4],
     reward: lines[6],
     description: lines[8]
   }

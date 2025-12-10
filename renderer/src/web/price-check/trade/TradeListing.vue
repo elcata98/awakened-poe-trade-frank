@@ -18,7 +18,7 @@
             <th :class="$style.tableHeading">
               <div class="px-2">{{ t(':price') }}</div>
             </th>
-            <th v-if="item.stackSize" :class="$style.tableHeading">
+            <th v-if="item.stackSizeOld" :class="$style.tableHeading">
               <div class="px-2">{{ t(':stock') }}</div>
             </th>
             <th v-if="filters.itemLevel" :class="$style.tableHeading">
@@ -54,7 +54,7 @@
                   <i v-if="!result.hasNote" class="fas fa-question" />
                 </span>
               </td>
-              <td v-if="item.stackSize" class="px-2 text-right">{{ result.stackSize }}</td>
+              <td v-if="item.stackSizeOld" class="px-2 text-right">{{ result.stackSize }}</td>
               <td v-if="filters.itemLevel" class="px-2 whitespace-nowrap text-right">{{ result.itemLevel }}</td>
               <td v-if="item.category === 'Gem'" class="pl-2 whitespace-nowrap">{{ result.level }}</td>
               <td v-if="filters.quality || item.category === 'Gem'" class="px-2 whitespace-nowrap text-blue-400 text-right">{{ result.quality }}</td>

@@ -365,7 +365,7 @@ function parseStackSize (section: string[], item: ParsedItem) {
   if (section[0].startsWith(_$.STACK_SIZE)) {
     // Portal Scroll "Stack Size: 2[localized separator]448/40"
     const [value, max] = section[0].slice(_$.STACK_SIZE.length).replace(/[^\d/]/g, '').split('/').map(Number)
-    item.stackSize = { value, max }
+    item.stackSizeOld = { value, max }
 
     return 'SECTION_PARSED'
   }

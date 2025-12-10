@@ -56,9 +56,9 @@ export default defineComponent({
             amount: props.filters.stackSize!.value,
             price: getPriceFor(props.filters.stackSize!.value)
           },
-          oneStack: props.item.stackSize ? {
-            amount: props.item.stackSize.max,
-            price: getPriceFor(props.item.stackSize.max)
+          oneStack: props.item.stackSizeOld ? {
+            amount: props.item.stackSizeOld.max,
+            price: getPriceFor(props.item.stackSizeOld.max)
           } : null
         }
       })

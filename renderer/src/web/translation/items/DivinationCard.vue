@@ -4,9 +4,9 @@
     <table>
       <th><img :src="item.info.icon" style="object-fit: none;" /></th>
       <tr><br /></tr>
-      <th>{{ item.cardName }}</th>
+      <th>{{ item.name }}</th>
       <tr><br /></tr>
-      <tr>{{ item.cardStackSize }}</tr>
+      <tr>{{ item.stackSize }}</tr>
       <tr><br /></tr>
       <th>{{ item.reward }}</th>
       <tr><br /></tr>

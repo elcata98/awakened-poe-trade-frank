@@ -53,7 +53,7 @@ export interface ParsedItem {
     linked?: number // only 5 or 6
     white: number
   }
-  stackSize?: { value: number, max: number }
+  stackSizeOld?: { value: number, max: number }
   isUnidentified: boolean
   isCorrupted: boolean
   isUnmodifiable?: boolean
@@ -79,11 +79,11 @@ export interface ParsedItem {
   category?: ItemCategory
   info: BaseType
   rawText: string
+  name: string
 }
 
 export interface DivinationCard extends ParsedItem {
-  cardName: string
-  cardStackSize: string
+  stackSize: string
   reward: string
   description: string
 }
@@ -105,6 +105,7 @@ export function createVirtualItem (
     statsByType: props.statsByType ?? [],
     unknownModifiers: props.unknownModifiers ?? [],
     influences: props.influences ?? [],
+    name: props.name ?? '',
     rawText: 'VIRTUAL_ITEM'
   }
 }
