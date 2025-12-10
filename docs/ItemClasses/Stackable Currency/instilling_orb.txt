@@ -1,0 +1,12 @@
+Item Class: Stackable Currency
+Rarity: Currency
+Instilling Orb
+--------
+Stack Size: 78/20
+--------
+Adds an enchantment to a utility flask that will cause
+it to be used when certain conditions are met
+Replaces any existing enchantment
+--------
+Right click this item then left click a flask to apply it.
+Shift click to unstack.

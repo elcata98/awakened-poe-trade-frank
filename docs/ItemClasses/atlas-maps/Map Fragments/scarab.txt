@@ -1,0 +1,12 @@
+Item Class: Map Fragments
+Rarity: Normal
+Betrayal Scarab of Reinforcements
+--------
+Stack Size: 6/20
+Limit: 1
+--------
+Immortal Syndicate Members in Area have 50% increased chance to be accompanied by reinforcements
+--------
+Move and countermove.
+--------
+Can be used in a personal Map Device to add modifiers to a Map.

@@ -1,0 +1,8 @@
+Item Class: Stackable Currency
+Rarity: Currency
+Ancient Shard
+--------
+Stack Size: 7/20
+--------
+A stack of 20 shards becomes an Ancient Orb.
+Shift click to unstack.

@@ -1,53 +1,36 @@
 <template>
-  <div v-if="show" class="p-4 layout-column min-h-0">
-    <!-- <label>{{ item }}</label>
-    <br/> -->
-    <label>{{ item.info.name }}</label>
-    <br/>
-    <label>{{ item.info.unique?.base }}</label>
-    <img :src="item.info.icon" style="object-fit: none;"/>
-    <br/>
-    <label>{{ item.rawText }}</label>
+  <div v-if="show" class="p-4 layout-column min-h-0" id="checked-translation">
+    <DivinationCard v-if="item.category === ItemCategory.DivinationCard" :item="item" />
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType, computed} from 'vue'
-import { useI18n } from 'vue-i18n'
-import { ItemRarity, ParsedItem } from '@/parser'
+<script setup lang="ts">
+import { computed } from 'vue'
+// import { useI18n } from 'vue-i18n'
+import { ItemCategory, ItemRarity, ParsedItem } from '@/parser'
+import DivinationCard from '@/web/translation/items/DivinationCard.vue'
 
-export default defineComponent({
-  name: 'CheckedTranslation',
-  props: {
-    item: {
-      type: Object as PropType<ParsedItem>,
-      required: true
-    }
-  },
-  setup (props) {
+const props = defineProps<{
+  item: ParsedItem
+}>()
 
-    const show = computed(() => {
-      return !(props.item.rarity === ItemRarity.Unique &&
-        props.item.isUnidentified &&
-        props.item.info.unique == null)
-    })
-
-    const { t } = useI18n()
-
-    const translations = computed(() => {
-      return props.item.rawText.split('\r\n')
-    })
-
-    const item = computed(() => {
-      return props.item
-    })
-
-    return {
-      t,
-      translations,
-      show,
-      item
-    }
-  }
+const show = computed(() => {
+  return !(props.item.rarity === ItemRarity.Unique &&
+    props.item.isUnidentified &&
+    props.item.info.unique == null)
 })
+
+// const { t } = useI18n()
+
+// const translations = computed(() => {
+//   return props.item.rawText.split('\r\n')
+// })
+
+const item = computed(() => {
+  return props.item
+})
+
+// const isDivCard = computed(() => {
+//   return props.item.category === ItemCategory.DivinationCard
+// })
 </script>

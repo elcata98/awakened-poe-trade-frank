@@ -1,0 +1,12 @@
+Item Class: Stackable Currency
+Rarity: Currency
+Enkindling Orb
+--------
+Stack Size: 52/20
+--------
+Adds an enchantment to a utility flask that will improve it
+but prevent it from gaining charges during its effect
+Replaces any existing enchantment
+--------
+Right click this item then left click a flask to apply it.
+Shift click to unstack.

@@ -1,0 +1,10 @@
+Item Class: Stackable Currency
+Rarity: Currency
+Cartographer's Chisel
+--------
+Stack Size: 229/20
+--------
+Improves the quality of a map
+--------
+Right click this item then left click a map to apply it. Has greater effect on lower tier, non-unique maps. The maximum quality is 20%.
+Shift click to unstack.

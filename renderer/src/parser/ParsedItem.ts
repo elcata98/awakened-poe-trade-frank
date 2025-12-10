@@ -81,6 +81,13 @@ export interface ParsedItem {
   rawText: string
 }
 
+export interface DivinationCard extends ParsedItem {
+  cardName: string
+  cardStackSize: string
+  reward: string
+  description: string
+}
+
 // NOTE: should match option values on trade
 export enum IncursionRoom {
   Open = 1,

@@ -1,0 +1,11 @@
+Item Class: Stackable Currency
+Rarity: Currency
+Stacked Deck
+--------
+Stack Size: 41/20
+--------
+A stack of unknown divination cards
+--------
+Right click to take a divination card out of the deck.  
+ Hold Ctrl + Right Click to repeatedly move a card from the stack into your inventory.
+Shift click to unstack.
