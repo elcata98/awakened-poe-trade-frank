@@ -112,12 +112,13 @@ function parseNamePlate (section: string[]) {
     influences: [],
     info: undefined!,
     infoVariants: undefined!,
-    rawText: undefined!
+    rawText: undefined!,
+    description: []
   }
 
   switch (rarityText) {
     case _$.RARITY_CURRENCY:
-      item.category = ItemCategory.Currency; break
+      item.category = ItemCategory.StackableCurrency; break
     case _$.RARITY_DIVCARD:
       item.category = ItemCategory.DivinationCard; break
     case _$.RARITY_GEM:

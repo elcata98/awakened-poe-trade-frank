@@ -101,30 +101,6 @@ const LANGUAGE_DETECTOR = [{
   lang: 'en',
   firstLine: 'Item Class: '
 }, {
-  lang: 'ru',
-  firstLine: 'Класс предмета: '
-}, {
-  lang: 'fr',
-  firstLine: 'Classe d\'objet: '
-}, {
-  lang: 'de',
-  firstLine: 'Gegenstandsklasse: '
-}, {
-  lang: 'pt',
-  firstLine: 'Classe do Item: '
-}, {
-  lang: 'es',
-  firstLine: 'Clase de objeto: '
-}, {
-  lang: 'th',
-  firstLine: 'ชนิดไอเทม: '
-}, {
-  lang: 'ko',
-  firstLine: '아이템 종류: '
-}, {
-  lang: 'cmn-Hant',
-  firstLine: '物品種類: '
-}, {
-  lang: 'cmn-Hans',
-  firstLine: '物品类别: '
+  lang: 'jp',
+  firstLine: 'アイテムクラス: '
 }]

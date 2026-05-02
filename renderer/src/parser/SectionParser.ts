@@ -358,7 +358,7 @@ function parseGem (section: string[], item: ParsedItem) {
 
 function parseStackSize (section: string[], item: ParsedItem) {
   if (item.rarity !== ItemRarity.Normal &&
-      item.category !== ItemCategory.Currency &&
+      item.category !== ItemCategory.StackableCurrency &&
       item.category !== ItemCategory.DivinationCard) {
     return 'PARSER_SKIPPED'
   }

@@ -40,7 +40,7 @@ export enum ItemCategory {
   Invitation = 'Invitation',
   ExpeditionLogbook = 'Expedition Logbook',
   Gem = 'Gem',
-  Currency = 'Currency',
+  StackableCurrency = 'Stackable Currency',
   DivinationCard = 'Divination Card',
   Voidstone = 'Voidstone',
   Sentinel = 'Sentinel',

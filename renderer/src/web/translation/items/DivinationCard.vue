@@ -2,15 +2,15 @@
   <div id="div-card">
     <br />
     <table>
-      <th><img :src="item.info.icon" style="object-fit: none;" /></th>
+      <tr><th><img :src="item.info.icon" style="object-fit: none;" /></th></tr>
+      <tr><td><br /></td></tr>
+      <tr><th>{{ item.name }}</th></tr>
+      <tr><td><br /></td></tr>
+      <tr><td>{{ item.stackSize }}</td></tr>
+      <tr><td><br /></td></tr>
+      <tr><th>{{ item.reward }}</th></tr>
       <tr><br /></tr>
-      <th>{{ item.name }}</th>
-      <tr><br /></tr>
-      <tr>{{ item.stackSize }}</tr>
-      <tr><br /></tr>
-      <th>{{ item.reward }}</th>
-      <tr><br /></tr>
-      <tr>{{ item.description }}</tr>
+      <tr v-for="line in item.description"><td>{{ line }}</td></tr>
     </table>
   </div>
 </template>

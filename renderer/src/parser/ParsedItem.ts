@@ -77,16 +77,24 @@ export interface ParsedItem {
     target?: 'Enchants' | 'Trinkets' | 'Gems' | 'Replicas'
   }
   category?: ItemCategory
-  info: BaseType
+  info?: BaseType
   rawText: string
-  name: string
+  name: string  // sections[0][2]
+  description: string[] // sections[2] or sections[3] for div-card
+  instructions? : string[] // sections[3] (if present)
 }
 
-export interface DivinationCard extends ParsedItem {
-  stackSize: string
-  reward: string
-  description: string
+export interface StackableItem extends ParsedItem {
+  stackSize: string // sections[1][0]
 }
+
+export interface DivinationCard extends StackableItem {
+  reward: string  // sections[2]
+}
+
+export interface StackableCurrency extends StackableItem {
+}
+
 
 // NOTE: should match option values on trade
 export enum IncursionRoom {
@@ -106,6 +114,7 @@ export function createVirtualItem (
     unknownModifiers: props.unknownModifiers ?? [],
     influences: props.influences ?? [],
     name: props.name ?? '',
+    description: props.description ?? [],
     rawText: 'VIRTUAL_ITEM'
   }
 }
