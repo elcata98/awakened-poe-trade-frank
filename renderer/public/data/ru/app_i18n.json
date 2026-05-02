@@ -83,6 +83,16 @@
     "stock": "Запас: {0}",
     "map_tier": "Ур. карты: {0}",
     "area_level": "Ур. области: {0}",
+    "heist_job_lockpicking": "Требуется взлом ({0} уровень)",
+    "heist_job_bruteforce": "Требуется грубая сила ({0} уровень)",
+    "heist_job_perception": "Требуется восприятие ({0} уровень)",
+    "heist_job_demolition": "Требуется взрывное дело ({0} уровень)",
+    "heist_job_counterthaumaturgy": "Требуется контрмагия ({0} уровень)",
+    "heist_job_trapdisarmament": "Требуется разминирование ({0} уровень)",
+    "heist_job_agility": "Требуется проворство ({0} уровень)",
+    "heist_job_deception": "Требуется маскировка ({0} уровень)",
+    "heist_job_engineering": "Требуется инженерное дело ({0} уровень)",
+    "heist_target_priceless": "Предмет кражи: бесценный",
     "heist_wings_revealed": "Крыльев обнаружено: {0}",
     "linked_sockets": "Связи: {0}",
     "white_sockets": "Белые: {0}",
@@ -114,6 +124,8 @@
     "foil_unique": "Реликвия",
     "mirrored": "Отражено",
     "not_mirrored": "Не отражено",
+    "split": "Разделено",
+    "not_split": "Не разделено",
     "map_foil_reward": "Особая {0}"
   },
   "item_category": {
@@ -190,6 +202,7 @@
     "tag_foulborn": "нечестивый",
     "tag_eldritch": "зловещий",
     "tag_pseudo": "псевдо",
+    "tag_not": "нет",
     "tag_explicit": "свойство",
     "tag_explicit_shaper": "Создатель",
     "tag_explicit_elder": "Древний",
@@ -298,7 +311,7 @@
     "getting_price_from": "с poe.ninja \u2026",
     "you_have": "В наличии",
     "stack": "Стак",
-    "legacy_bulk_xchg_msg": "Этот предмет доступен на внутриигровом рынке обмена валют.",
+    "legacy_bulk_xchg_msg": "Этот предмет доступен на внутриигровом рынке обмена валют",
     "market_ratio": "Рыночный курс"
   },
   "settings": {

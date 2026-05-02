@@ -35,7 +35,7 @@ export interface ParsedItem {
   mapBlighted?: 'Blighted' | 'Blight-ravaged'
   mapCompletionReward?: string
   map?: {
-    tier: number
+    tier: number | undefined
     itemQuantity?: number
     itemRarity?: number
     packSize?: number
@@ -45,6 +45,7 @@ export interface ParsedItem {
     moreDivCards?: number
   }
   gemLevel?: number
+  imbuedGem?: boolean
   areaLevel?: number
   talismanTier?: number
   memoryStrands?: number
@@ -58,6 +59,7 @@ export interface ParsedItem {
   isCorrupted: boolean
   isUnmodifiable?: boolean
   isMirrored?: boolean
+  isSplit?: boolean
   influences: ItemInfluence[]
   logbookAreaMods?: ParsedModifier[][]
   sentinelCharge?: number
@@ -72,9 +74,14 @@ export interface ParsedItem {
     text: string
     type: ModifierType
   }>
-  heist?: {
+  heistBlueprint?: {
     wingsRevealed?: number
     target?: 'Enchants' | 'Trinkets' | 'Gems' | 'Replicas'
+  }
+  heistContract?: {
+    requiredJob?: 'Lockpicking' | 'Brute Force' | 'Perception' | 'Demolition' | 'Counter-Thaumaturgy' | 'Trap Disarmament' | 'Agility' | 'Deception' | 'Engineering'
+    jobLevel?: number
+    targetValue?: 'Priceless'
   }
   category?: ItemCategory
   info: BaseType

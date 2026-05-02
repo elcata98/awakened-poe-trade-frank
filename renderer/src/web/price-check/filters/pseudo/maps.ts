@@ -1,7 +1,9 @@
 import { stat, pseudoStatByRef } from '@/assets/data'
 import { ItemRarity } from '@/parser/ParsedItem'
+import { ModifierType } from '@/parser/modifiers'
 import { FiltersCreationContext } from '../create-stat-filters'
 import { noSourcePseudoToFilter, propToFilter } from './item-property'
+import { findAndResolveByRef, statToNotFilter } from './utils'
 
 const PSEUDO = {
   MORE_SCARABS: stat('More Scarabs: #%'),
@@ -11,13 +13,17 @@ const PSEUDO = {
   EXPLICIT_MODIFIERS: stat('# Modifiers')
 }
 
+const VALDO_LETHAL_STATS = [
+  stat('Players who Die in area are sent to the Void')
+]
+
 export function mapProps (ctx: FiltersCreationContext): void {
   const { item } = ctx
   if (!item.map || item.mapBlighted || item.mapCompletionReward || item.rarity === ItemRarity.Unique) return
 
   const hasMoreDrops = Boolean(item.map.moreMaps || item.map.moreScarabs || item.map.moreCurrency || item.map.moreDivCards)
 
-  if (!item.isCorrupted && !hasMoreDrops && item.map.tier !== 17) return
+  if (!item.isCorrupted && !hasMoreDrops && item.info.refName !== 'Nightmare Map') return
 
   if (item.map.itemQuantity) {
     ctx.filters.push(propToFilter({
@@ -83,5 +89,21 @@ export function mapProps (ctx: FiltersCreationContext): void {
       roll: { min: 0, max: 8, value: explicitMods.length },
       disabled: false
     }, { ...ctx, searchInRange: 0 }))
+  }
+}
+
+export function valdoBadMods (ctx: FiltersCreationContext): void {
+  if (!ctx.item.mapCompletionReward) return
+
+  for (const lethalStatRef of VALDO_LETHAL_STATS) {
+    if (ctx.item.statsByType.some(calc => calc.stat.ref === lethalStatRef)) continue
+
+    const lethalStat = findAndResolveByRef(lethalStatRef, ctx.item.category)
+    const filter = statToNotFilter({
+      stat: lethalStat,
+      type: ModifierType.Explicit,
+      disabled: false
+    })
+    ctx.filters.push(filter)
   }
 }

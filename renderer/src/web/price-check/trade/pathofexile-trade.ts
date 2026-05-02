@@ -1,4 +1,4 @@
-import { ItemInfluence, ItemCategory, ParsedItem, ItemRarity } from '@/parser'
+import { ItemInfluence, ItemCategory } from '@/parser'
 import { ItemFilters, StatFilter, INTERNAL_TRADE_IDS, InternalTradeId } from '../filters/interfaces'
 import { setProperty as propSet } from 'dot-prop'
 import { DateTime } from 'luxon'
@@ -80,15 +80,10 @@ const INFLUENCE_PSEUDO_TEXT = {
   [ItemInfluence.Warlord]: stat('Has Warlord Influence')
 }
 
-const FLASK = {
-  INCR_CHARGE_RECOVERY: stat('#% increased Charge Recovery'),
-  INCR_EFFECT: stat('#% increased effect')
-}
-
 interface FilterBoolean { option?: 'true' | 'false' }
 interface FilterRange { min?: number, max?: number }
 
-interface TradeRequest { /* eslint-disable camelcase */
+interface TradeRequest {
   query: {
     status: { option: 'online' | 'securable' | 'available' | 'any' }
     name?: string | { discriminator: string, option: string }
@@ -133,7 +128,9 @@ interface TradeRequest { /* eslint-disable camelcase */
           gem_level?: FilterRange
           corrupted?: FilterBoolean
           fractured_item?: FilterBoolean
+          gem_imbued?: FilterBoolean
           mirrored?: FilterBoolean
+          split?: FilterBoolean
           identified?: FilterBoolean
           stack_size?: FilterRange
           memory_level?: FilterRange
@@ -174,6 +171,7 @@ interface TradeRequest { /* eslint-disable camelcase */
       heist_filters?: {
         filters: {
           heist_wings?: FilterRange
+          heist_objective_value?: { option?: 'priceless' }
           heist_agility?: FilterRange
           heist_brute_force?: FilterRange
           heist_counter_thaumaturgy?: FilterRange
@@ -257,7 +255,7 @@ export interface PricingResult {
   ign: string
 }
 
-export function createTradeRequest (filters: ItemFilters, stats: StatFilter[], item: ParsedItem) {
+export function createTradeRequest (filters: ItemFilters, stats: StatFilter[]) {
   const body: TradeRequest = {
     query: {
       status: {
@@ -325,18 +323,16 @@ export function createTradeRequest (filters: ItemFilters, stats: StatFilter[], i
   if (filters.fractured?.value === false) {
     propSet(query.filters, 'misc_filters.filters.fractured_item.option', String(false))
   }
+  if (filters.imbuedGem?.disabled) {
+    propSet(query.filters, 'misc_filters.filters.gem_imbued.option', String(false))
+  }
+  if (filters.split?.disabled) {
+    propSet(query.filters, 'misc_filters.filters.split.option', String(false))
+  }
   if (filters.foulborn?.value === false) {
     propSet(query.filters, 'misc_filters.filters.foulborn_item.option', String(false))
   }
-  if (filters.mirrored) {
-    if (filters.mirrored.disabled) {
-      propSet(query.filters, 'misc_filters.filters.mirrored.option', String(false))
-    }
-  } else if (
-    item.rarity === ItemRarity.Normal ||
-    item.rarity === ItemRarity.Magic ||
-    item.rarity === ItemRarity.Rare
-  ) {
+  if (filters.mirrored?.disabled) {
     propSet(query.filters, 'misc_filters.filters.mirrored.option', String(false))
   }
 
@@ -390,6 +386,9 @@ export function createTradeRequest (filters: ItemFilters, stats: StatFilter[], i
 
   if (filters.areaLevel && !filters.areaLevel.disabled) {
     propSet(query.filters, 'map_filters.filters.area_level.min', filters.areaLevel.value)
+    if (filters.areaLevel.max) {
+      propSet(query.filters, 'map_filters.filters.area_level.max', filters.areaLevel.max)
+    }
   }
 
   if (filters.heistWingsRevealed && !filters.heistWingsRevealed.disabled) {
@@ -401,6 +400,8 @@ export function createTradeRequest (filters: ItemFilters, stats: StatFilter[], i
   }
 
   for (const stat of stats) {
+    if (!stat.tradeId[0].startsWith('item.')) continue
+
     if (stat.tradeId[0] === 'item.has_empty_modifier') {
       const TARGET_ID = {
         CRAFTED_MODIFIERS: pseudoStatByRef(TOTAL_MODS_TEXT.CRAFTED_MODIFIERS[stat.option!.value])!.trade.ids[ModifierType.Pseudo][0],
@@ -425,25 +426,6 @@ export function createTradeRequest (filters: ItemFilters, stats: StatFilter[], i
         filters: [
           { id: TARGET_ID.EMPTY_MODIFIERS, value: { min: 1, max: 1 }, disabled: stat.disabled },
           { id: TARGET_ID.TOTAL_MODIFIERS, value: { min: 6, max: undefined }, disabled: stat.disabled }
-        ]
-      })
-    } else if (
-      item.category === ItemCategory.Flask &&
-      stat.statRef === FLASK.INCR_CHARGE_RECOVERY &&
-      !stats.some(s => s.statRef === FLASK.INCR_EFFECT)
-    ) {
-      const statGroup = STAT_BY_REF_V2(FLASK.INCR_EFFECT)!
-      if (!('stats' in statGroup && statGroup.resolve.strat === 'select')) {
-        throw new Error(`Unexpected stat shape: ${FLASK.INCR_EFFECT}`)
-      }
-      const incrStat = statGroup.stats[statGroup.resolve.test.indexOf(null)]
-
-      const reducedEffectId = incrStat.trade.ids[ModifierType.Explicit][0]
-      query.stats.push({
-        type: 'not',
-        disabled: stat.disabled,
-        filters: [
-          { id: reducedEffectId, disabled: stat.disabled }
         ]
       })
     }
@@ -512,12 +494,51 @@ export function createTradeRequest (filters: ItemFilters, stats: StatFilter[], i
         propSet(query.filters, 'map_filters.filters.map_packsize.min', typeof input.min === 'number' ? input.min : undefined)
         propSet(query.filters, 'map_filters.filters.map_packsize.max', typeof input.max === 'number' ? input.max : undefined)
         break
+      case 'item.heist_job_agility':
+        propSet(query.filters, 'heist_filters.filters.heist_agility.min', typeof input.min === 'number' ? input.min : 1)
+        propSet(query.filters, 'heist_filters.filters.heist_agility.max', typeof input.max === 'number' ? input.max : undefined)
+        break
+      case 'item.heist_job_bruteforce':
+        propSet(query.filters, 'heist_filters.filters.heist_brute_force.min', typeof input.min === 'number' ? input.min : 1)
+        propSet(query.filters, 'heist_filters.filters.heist_brute_force.max', typeof input.max === 'number' ? input.max : undefined)
+        break
+      case 'item.heist_job_counterthaumaturgy':
+        propSet(query.filters, 'heist_filters.filters.heist_counter_thaumaturgy.min', typeof input.min === 'number' ? input.min : 1)
+        propSet(query.filters, 'heist_filters.filters.heist_counter_thaumaturgy.max', typeof input.max === 'number' ? input.max : undefined)
+        break
+      case 'item.heist_job_deception':
+        propSet(query.filters, 'heist_filters.filters.heist_deception.min', typeof input.min === 'number' ? input.min : 1)
+        propSet(query.filters, 'heist_filters.filters.heist_deception.max', typeof input.max === 'number' ? input.max : undefined)
+        break
+      case 'item.heist_job_demolition':
+        propSet(query.filters, 'heist_filters.filters.heist_demolition.min', typeof input.min === 'number' ? input.min : 1)
+        propSet(query.filters, 'heist_filters.filters.heist_demolition.max', typeof input.max === 'number' ? input.max : undefined)
+        break
+      case 'item.heist_job_engineering':
+        propSet(query.filters, 'heist_filters.filters.heist_engineering.min', typeof input.min === 'number' ? input.min : 1)
+        propSet(query.filters, 'heist_filters.filters.heist_engineering.max', typeof input.max === 'number' ? input.max : undefined)
+        break
+      case 'item.heist_job_lockpicking':
+        propSet(query.filters, 'heist_filters.filters.heist_lockpicking.min', typeof input.min === 'number' ? input.min : 1)
+        propSet(query.filters, 'heist_filters.filters.heist_lockpicking.max', typeof input.max === 'number' ? input.max : undefined)
+        break
+      case 'item.heist_job_perception':
+        propSet(query.filters, 'heist_filters.filters.heist_perception.min', typeof input.min === 'number' ? input.min : 1)
+        propSet(query.filters, 'heist_filters.filters.heist_perception.max', typeof input.max === 'number' ? input.max : undefined)
+        break
+      case 'item.heist_job_trapdisarmament':
+        propSet(query.filters, 'heist_filters.filters.heist_trap_disarmament.min', typeof input.min === 'number' ? input.min : 1)
+        propSet(query.filters, 'heist_filters.filters.heist_trap_disarmament.max', typeof input.max === 'number' ? input.max : undefined)
+        break
+      case 'item.heist_target_priceless':
+        propSet(query.filters, 'heist_filters.filters.heist_objective_value.option', 'priceless')
+        break
     }
   }
 
   type BareStatFilter = Omit<StatFilter, 'statRef' | 'text' | 'tag' | 'sources'>
   const realStats: BareStatFilter[] = stats.filter(stat =>
-    !INTERNAL_TRADE_IDS.includes(stat.tradeId[0] as any))
+    !INTERNAL_TRADE_IDS.includes(stat.tradeId[0]))
   if (filters.veiled) {
     for (const statRef of filters.veiled.statRefs) {
       const statOrGroup = STAT_BY_REF_V2(statRef)!
@@ -541,17 +562,32 @@ export function createTradeRequest (filters: ItemFilters, stats: StatFilter[], i
   }
 
   const qAnd = query.stats[0]
+  const qNot: TradeRequest['query']['stats'][number] = {
+    type: 'not',
+    filters: []
+  }
+
   for (const stat of realStats) {
-    if (stat.tradeId.length === 1) {
-      qAnd.filters.push(tradeIdToQuery(stat.tradeId[0], stat))
+    if (stat.not) {
+      for (const id of stat.tradeId) {
+        qNot.filters.push(tradeIdToQuery(id, stat))
+      }
     } else {
-      query.stats.push({
-        type: 'count',
-        value: { min: 1 },
-        disabled: stat.disabled,
-        filters: stat.tradeId.map(id => tradeIdToQuery(id, stat))
-      })
+      if (stat.tradeId.length === 1) {
+        qAnd.filters.push(tradeIdToQuery(stat.tradeId[0], stat))
+      } else {
+        query.stats.push({
+          type: 'count',
+          value: { min: 1 },
+          disabled: stat.disabled,
+          filters: stat.tradeId.map(id => tradeIdToQuery(id, stat))
+        })
+      }
     }
+  }
+
+  if (qNot.filters.length) {
+    query.stats.push(qNot)
   }
 
   return body

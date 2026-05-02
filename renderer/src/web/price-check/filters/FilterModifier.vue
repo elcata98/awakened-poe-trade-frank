@@ -43,6 +43,8 @@
           </ui-popover>
         </div>
         <div class="flex-1 min-w-0 flex items-start gap-x-2">
+          <span v-if="filter.not"
+            :class="[$style['tag'], $style['tag-not']]">{{ t('filters.tag_not') }}</span>
           <span v-if="showTag"
             :class="[$style['tag'], $style[`tag-${tag}`]]">{{ t(`filters.tag_${tag.replace('-', '_')}`) }}{{ (filter.sources.length > 1) ? ` x ${filter.sources.length}` : null }}</span>
           <filter-modifier-tiers :filter="filter" :item="item" />
@@ -74,7 +76,7 @@ import ModifierAnointment from './FilterModifierAnointment.vue'
 import FilterModifierItemHasEmpty from './FilterModifierItemHasEmpty.vue'
 import FilterModifierTiers from './FilterModifierTiers.vue'
 import { AppConfig } from '@/web/Config'
-import { ItemRarity, ParsedItem } from '@/parser'
+import { ItemCategory, ItemRarity, ParsedItem } from '@/parser'
 import { FilterTag, StatFilter, INTERNAL_TRADE_IDS } from './interfaces'
 import SourceInfo from './SourceInfo.vue'
 
@@ -102,6 +104,7 @@ export default defineComponent({
       props.item.info.refName !== 'Chronicle of Atzoatl' &&
       props.item.info.refName !== 'Mirrored Tablet' &&
       props.item.info.refName !== 'Filled Coffin' &&
+      props.item.category !== ItemCategory.Gem &&
       !(props.item.rarity === ItemRarity.Unique && (
         props.filter.tag === FilterTag.Explicit ||
         props.filter.tag === FilterTag.Pseudo))
@@ -180,12 +183,12 @@ export default defineComponent({
       inputMaxEl,
       sliderValue,
       inputMin: computed({
-        get (): any { return props.filter.roll!.min },
-        set (value: '' | number) { props.filter.roll!.min = value }
+        get () { return props.filter.roll!.min },
+        set (value: '' | number | undefined) { props.filter.roll!.min = value }
       }),
       inputMax: computed({
-        get (): any { return props.filter.roll!.max },
-        set (value: '' | number) { props.filter.roll!.max = value }
+        get () { return props.filter.roll!.max },
+        set (value: '' | number | undefined) { props.filter.roll!.max = value }
       }),
       tag: computed(() => props.filter.tag),
       // TODO: change
@@ -194,7 +197,7 @@ export default defineComponent({
       fontSize: computed(() => AppConfig().fontSize),
       isDisabled: computed(() => props.filter.disabled),
       text: computed(() => {
-        if (!(INTERNAL_TRADE_IDS as readonly string[]).includes(props.filter.tradeId[0])) {
+        if (!INTERNAL_TRADE_IDS.includes(props.filter.tradeId[0])) {
           return props.filter.text
         } else {
           return t(props.filter.tradeId[0], ['#', '#'])
@@ -346,7 +349,8 @@ export default defineComponent({
   @apply bg-pink-700 text-white; }
 .tag-enchant {
   @apply bg-purple-600 text-purple-100; }
-.tag-pseudo {
+.tag-pseudo,
+.tag-not {
   @apply bg-gray-700 text-black; }
 </style>
 

@@ -39,8 +39,10 @@
         :filter="filters.veiled" :text="t('item.veiled')" />
       <filter-btn-logical v-if="filters.foil"
         :filter="filters.foil" :text="t('item.foil_unique')" />
-      <filter-btn-logical v-if="filters.mirrored" active
+      <filter-btn-logical v-if="filters.mirrored && !filters.mirrored.hidden" active
         :filter="filters.mirrored" :text="t(filters.mirrored.disabled ? 'item.not_mirrored' : 'item.mirrored')" />
+      <filter-btn-logical v-if="filters.split && !filters.split.hidden" active
+        :filter="filters.split" :text="t(filters.split.disabled ? 'item.not_split' : 'item.split')" />
       <filter-btn-logical v-if="hasStats"
         :collapse="statsVisibility.disabled"
         :filter="statsVisibility"
@@ -78,7 +80,7 @@
       <div class="flex gap-x-4">
         <button @click="statsVisibility.disabled = !statsVisibility.disabled" class="bg-gray-700 px-2 py-1 text-gray-400 leading-none rounded-b w-40"
           >{{ t('filters.collapse') }} <i class="fas fa-chevron-up pl-1 text-xs text-gray-600"></i></button>
-        <ui-toggle v-if="filteredStats.length != stats.length"
+        <ui-toggle v-if="filteredStats.length !== stats.length"
           v-model="showHidden" class="text-gray-400 pt-2">{{ t('filters.hidden_toggle') }}</ui-toggle>
         <ui-toggle
           v-model="showFilterSources" class="ml-auto text-gray-400 pt-2">{{ t('filters.mods_toggle') }}</ui-toggle>
@@ -139,7 +141,7 @@ export default defineComponent({
     const showUnknownMods = computed(() =>
       props.item.unknownModifiers.length &&
       props.item.category !== ItemCategory.Sentinel &&
-      !(props.item.category === ItemCategory.Map && props.item.rarity === ItemRarity.Unique)
+      props.item.category !== ItemCategory.Map
     )
 
     const { t } = useI18n()

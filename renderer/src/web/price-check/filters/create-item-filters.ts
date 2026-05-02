@@ -5,7 +5,6 @@ import { tradeTag } from '../trade/common'
 import { ModifierType } from '@/parser/modifiers'
 import { BaseType, ITEM_BY_REF, ITEM_BY_TRANSLATED } from '@/assets/data'
 import { CATEGORY_TO_TRADE_ID } from '../trade/pathofexile-trade'
-import { PERMANENT_SC } from '../../background/Leagues'
 
 export const SPECIAL_SUPPORT_GEM = ['Empower Support', 'Enlighten Support', 'Enhance Support']
 
@@ -27,8 +26,10 @@ export function createFilters (
     trade: {
       offline: false,
       onlineInLeague: false,
-      merchantOnly: !PERMANENT_SC.includes(opts.league) &&
-        item.category !== ItemCategory.DivinationCard,
+      merchantOnly:
+        // these are Divination Cards, and some items at start of league
+        // that are on Currency Exchange but was not added to Bulk section of site yet
+        !(item.info.exchangeable && !item.info.tradeTag),
       listed: undefined,
       currency: opts.currency,
       league: opts.league,
@@ -92,15 +93,21 @@ export function createFilters (
         value: floorToBracket(item.areaLevel!, [1, 68, 73, 75, 78, 80]),
         disabled: false
       }
-    }
-    if (item.info.refName === 'Mirrored Tablet') {
+    } else if (item.info.refName === 'Mirrored Tablet') {
       filters.areaLevel = {
         value: item.areaLevel!,
         disabled: false
       }
-    }
-    // Incubators, Wombgifts, Forbidden Tome
-    if (item.itemLevel) {
+    } else if (item.info.refName === 'Forbidden Tome') {
+      filters.areaLevel = {
+        value: item.areaLevel!,
+        disabled: false
+      }
+      if (item.areaLevel! < 83) {
+        filters.areaLevel.max = item.areaLevel!
+      }
+    } else if (item.itemLevel) {
+      // Incubators, Wombgifts
       filters.itemLevel = {
         value: item.itemLevel,
         disabled: false
@@ -117,19 +124,14 @@ export function createFilters (
         baseTypeTrade: t(opts, ITEM_BY_REF('ITEM', item.info.unique.base)![0])
       }
     } else {
-      const ignoreLayout =
-        item.mapCompletionReward != null ||
-        item.statsByType.some(calc =>
-          calc.stat.ref === 'Map is occupied by #' ||
-          calc.stat.ref === "Map contains #'s Citadel")
       filters.searchExact = {
         baseType: item.info.name,
         baseTypeTrade: t(opts, item.info)
       }
-      filters.searchRelaxed = {
-        category: item.category,
-        disabled: !ignoreLayout
-      }
+    }
+
+    if (item.info.refName === 'Map' || item.info.unique?.base === 'Map') {
+      filters.discriminator = { trade: 'map' }
     }
 
     if (item.mapBlighted) {
@@ -143,9 +145,11 @@ export function createFilters (
       }
     }
 
-    filters.mapTier = {
-      value: item.map!.tier,
-      disabled: false
+    if (item.map!.tier) {
+      filters.mapTier = {
+        value: item.map!.tier,
+        disabled: false
+      }
     }
   } else if (item.info.refName === 'Expedition Logbook') {
     filters.searchExact = {
@@ -171,9 +175,9 @@ export function createFilters (
       disabled: false
     }
 
-    if (item.heist?.wingsRevealed) {
+    if (item.heistBlueprint?.wingsRevealed) {
       filters.heistWingsRevealed = {
-        value: item.heist.wingsRevealed,
+        value: item.heistBlueprint.wingsRevealed,
         disabled: false
       }
     }
@@ -198,7 +202,8 @@ export function createFilters (
         disabled = true
       } else if (
         item.category === ItemCategory.SanctumRelic ||
-        item.category === ItemCategory.Charm
+        item.category === ItemCategory.Charm ||
+        item.category === ItemCategory.HeistContract
       ) {
         disabled = false
       }
@@ -286,7 +291,20 @@ export function createFilters (
   }
 
   if (item.isMirrored) {
-    filters.mirrored = { disabled: false }
+    filters.mirrored = { disabled: false, hidden: false }
+  } else if (
+    item.info.craftable && !item.isCorrupted
+  ) {
+    filters.mirrored = { disabled: true, hidden: true }
+  }
+
+  if (item.isSplit) {
+    filters.split = { disabled: false, hidden: false }
+  } else if (
+    item.info.craftable && !item.isCorrupted && !item.isMirrored &&
+    !item.isSynthesised && !item.isFractured && !item.influences.length
+  ) {
+    filters.split = { disabled: true, hidden: true }
   }
 
   if (!item.isFractured &&
@@ -388,6 +406,15 @@ export function createFilters (
     }
   }
 
+  if (item.category === ItemCategory.HeistContract) {
+    if (item.rarity !== ItemRarity.Unique) {
+      filters.areaLevel = {
+        value: item.areaLevel!,
+        disabled: false
+      }
+    }
+  }
+
   return filters
 }
 
@@ -416,48 +443,25 @@ function createGemFilters (
     value: item.isCorrupted
   }
 
-  if (item.info.gem!.awakened) {
-    filters.gemLevel = {
-      value: item.gemLevel!,
-      disabled: (item.gemLevel! < 5)
-    }
-
-    if (item.isCorrupted && item.quality) {
-      filters.quality = {
-        value: item.quality,
-        disabled: (item.quality < 20)
-      }
-    }
-
-    return filters
-  }
-
-  if (SPECIAL_SUPPORT_GEM.includes(item.info.refName)) {
-    filters.gemLevel = {
-      value: item.gemLevel!,
-      disabled: (item.gemLevel! < 3)
-    }
-
-    if (item.isCorrupted && item.quality) {
-      filters.quality = {
-        value: item.quality,
-        disabled: true
-      }
-    }
-
-    return filters
-  }
-
-  if (item.quality) {
-    filters.quality = {
-      value: item.quality,
-      disabled: (item.quality < 16)
+  if (!item.imbuedGem && item.isCorrupted && item.gemLevel! >= 20) {
+    filters.imbuedGem = {
+      disabled: true
     }
   }
 
   filters.gemLevel = {
     value: item.gemLevel!,
-    disabled: (item.gemLevel! < 19)
+    disabled: (item.gemLevel! < item.info.gem!.maxLevel)
+  }
+
+  if (item.quality) {
+    filters.quality = {
+      value: item.quality,
+      disabled: (item.info.gem!.maxLevel === 1) ? false
+        : (item.info.gem!.maxLevel === 20 && !item.info.gem!.transfigured)
+            ? (item.quality < 16)
+            : (item.quality < 20)
+    }
   }
 
   return filters

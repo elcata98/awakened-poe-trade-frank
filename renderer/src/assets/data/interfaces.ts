@@ -90,15 +90,16 @@ export interface BaseType {
   unique?: {
     base: BaseType['refName']
     fixedStats?: Array<Stat['ref']>
+    disenchantValue?: number
   }
   map?: {
     screenshot?: string
   }
   gem?: {
     vaal?: true
-    awakened?: true
     transfigured?: true
     normalVariant?: BaseType['refName']
+    maxLevel: number
   }
   armour?: {
     ar?: [min: number, max: number]
@@ -117,7 +118,7 @@ export interface TranslationDict {
   RARITY_CURRENCY: string
   RARITY_DIVCARD: string
   RARITY_QUEST: string
-  MAP_TIER: string
+  MAP_TIER: RegExp
   MAP_ITEM_QUANTITY: string
   MAP_ITEM_RARITY: string
   MAP_MONSTER_PACK_SIZE: string
@@ -175,17 +176,33 @@ export interface TranslationDict {
   QUALITY_PHANTASMAL: RegExp
   AREA_LEVEL: string
   HEIST_WINGS_REVEALED: string
-  HEIST_TARGET: string
+  HEIST_BLUEPRINT_TARGET: string
   HEIST_BLUEPRINT_ENCHANTS: string
   HEIST_BLUEPRINT_TRINKETS: string
   HEIST_BLUEPRINT_GEMS: string
   HEIST_BLUEPRINT_REPLICAS: string
+  HEIST_CONTRACT_JOB: RegExp
+  HEIST_JOB_LOCKPICKING: string
+  HEIST_JOB_BRUTEFORCE: string
+  HEIST_JOB_PERCEPTION: string
+  HEIST_JOB_DEMOLITION: string
+  HEIST_JOB_COUNTERTHAUMATURGY: string
+  HEIST_JOB_TRAPDISARMAMENT: string
+  HEIST_JOB_AGILITY: string
+  HEIST_JOB_DECEPTION: string
+  HEIST_JOB_ENGINEERING: string
+  HEIST_CONTRACT_TARGET: RegExp
+  HEIST_TARGET_PRICELESS: string
   MIRRORED: string
+  SPLIT: string
   MODIFIER_LINE: RegExp
   PREFIX_MODIFIER: string
   SUFFIX_MODIFIER: string
   CRAFTED_PREFIX: string
   CRAFTED_SUFFIX: string
+  IMPLICIT_MODIFIER: string
+  FRACTURED_PREFIX: string
+  FRACTURED_SUFFIX: string
   UNSCALABLE_VALUE: string
   CORRUPTED_IMPLICIT: string
   MODIFIER_INCREASED: RegExp
